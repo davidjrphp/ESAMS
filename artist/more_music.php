@@ -147,37 +147,10 @@ if (isset($_GET['cid'])) {
 </style>
 <div class="row">
     <div class="col-lg-12 col-md-12 col-md-12 col-xs-12 mx-auto my-5 py5">
-        <h4 class="heading title-font" style="font-size: 30px">Popular</h4>
         <div class="card shadow rounded-0">
             <div class="card-body rounded-0">
                 <div class="container-fluid"></div>
-                <div class="row">
-                    <div class="col-lg-6 col-md-8 col-sm-12 col-xs-12 mx-auto mt-5 mb-3 ">
-                        <h1 class="text-center font-weight-bolder title-font"><?= $page_title ?></h1>
-                        <hr class="mx-auto bg-primary opacity-100" style="height:2px;opacity:1;width:20%">
-                        <?php if (!empty($page_description)) : ?>
-                            <card class="rounded-0 shadow">
-                                <div class="card-body rounded-0">
-                                    <div class="container-fluid">
-                                        <div class="text-muted"><em><?= $page_description ?></em></div>
-                                    </div>
-                                </div>
-                            </card>
-                        <?php endif; ?>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-lg-6 col-md-8 col-sm-12 col-xs-12 mx-auto mb-5">
-                        <div class="input-group mb-3">
-                            <input type="search" id="search_cat" placeholder="Search Here" class="form-control">
-                            <div class="input-group-append">
-                                <span class="input-group-text"><i class="fas fa-search"></i></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+                <h4 class="heading title-font" style="font-size: 30px">Popular</h4><br><br>
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mx-auto mb-5">
                         <?php
@@ -194,7 +167,7 @@ if (isset($_GET['cid'])) {
                                 </div>
                                 <div class="music-details">
                                     <div class="music-title"><?= $row['title'] ?></div>
-                                    <div class="music-description"><?= str_replace("\n", "<br>", html_entity_decode($row['description'])) ?></div>
+                                    <!-- <div class="music-description"><?= str_replace("\n", "<br>", html_entity_decode($row['description'])) ?></div> -->
                                     <div class="music-player-field">
                                         <a href="<?= base_url . $row['audio_path'] ?>" download="<?= $row['title'] . "." . (pathinfo($row['audio_path'], PATHINFO_EXTENSION)) ?>" class="btn btn-md btn-outline-success rounded-circle p-0 music-btns"><i class="fa fa-download"></i></a>&nbsp;&nbsp;
                                         <a href="javascript:void(0)" data-id="<?= $row['id'] ?>" class="btn btn-md btn-outline-primary rounded-circle p-0 music-btns play_music"><i class="fa fa-play"></i></a> &nbsp;&nbsp;

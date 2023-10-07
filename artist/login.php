@@ -119,7 +119,7 @@
 <body>
   <div id="back-to-home">
     <a href="../index.php?page=home" class="btn btn-outline btn-default"><i class="fas fa-home animated zoomIn"></i><span>
-        <h5 class="back-to-home text-lightblue">Back to Home</h5>
+        <h5 class="back-to-home text-lightblue"></h5>
       </span></a>
 
   </div>
@@ -129,8 +129,8 @@
       <div class="login-card">
         <div class="login-card-items">
           <h1 class="login-tag">Please Login</h1>
-          <form id="login-frm" action="" method="post" class="form-items">
-            <input type="text" name="username" placeholder="Username">
+          <form id="alogin-frm" action="" method="post" class="form-items">
+            <input type="text" name="email" placeholder="Email">
             <div class="password-item">
               <input type="password" name="password" placeholder="Password">
               <div class="forgot-password-item">
@@ -145,6 +145,10 @@
                   Remember Me
                 </label>
               </div>
+            </div>
+            <div class="d-flex align-items-center login-button">
+              <h6 style="margin-left: 2rem">Create Account?</h6>
+              <a class="font-weight-bolder text-primary mx-2 text-decoration-none" href="../manage_account.php">Sign Up</a>
             </div>
         </div>
         </form>

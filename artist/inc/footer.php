@@ -65,6 +65,7 @@
     padding: 50px 0;
     color: #fff;
     text-align: center;
+    margin-left: 5rem;
   }
 
   #contact .overlay-mf {
@@ -143,14 +144,20 @@
       margin: 10px 15px;
     }
   }
+
+  .shortName {
+    margin-left: 5rem;
+  }
 </style>
 <!-- Footer-->
 <footer class="py-5 bg-dark">
   <div class="container">
-    <h1>
-      <img src="<?php echo validate_image($_settings->info('logo')) ?>" width="60" height="60" class="d-inline-block align-top rounded-circle" alt="" loading="lazy">
-      <?php echo $_settings->info('short_name') ?>
-    </h1>
+    <div class="shortName">
+      <h1>
+        <img src="<?php echo validate_image($_settings->info('logo')) ?>" width="60" height="60" class="d-inline-block align-top rounded-circle" alt="" loading="lazy">
+        <?php echo $_settings->info('short_name') ?>
+      </h1>
+    </div>
     <div class="m-0 item-center" id="contact">
       <div class="socil-icon d-flex flex-column">
         <ul>
@@ -162,7 +169,7 @@
         </ul>
       </div>
     </div>
-    <strong>&copy; <?php echo date('Y') ?>. <?php echo $_settings->info('short_name') ?></strong>
+    <strong class="float-center justify-center" style="margin-left: 5rem">&copy; <?php echo date('Y') ?>. <?php echo $_settings->info('short_name') ?></strong>
     <div class="float-right d-none d-sm-inline-block">Developed By: <a href="mailto:davidgaricajr955@gmail.com">David Mwelwa</a></div>
   </div>
 </footer>

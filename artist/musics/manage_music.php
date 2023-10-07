@@ -31,9 +31,9 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 </style>
 <div class="card card-outline rounded-0 card-purple">
 	<div class="card-header">
-		<h3 class="card-title"><?= isset($id) ? "Update Music Details" : "Add New Music Entry" ?></h3>
+		<h3 class="card-title"><?= isset($id) ? "Update Song Details" : "Enter Song Details" ?></h3>
 		<div class="card-tools">
-			<a href="<?= base_url . "admin/?page=musics" ?>" class="btn btn-flat btn-light bg-light"><span class="fas fa-angle-left"></span> Back to List</a>
+			<a href="<?= base_url . "artist/?page=musics" ?>" class="btn btn-flat btn-light bg-light"><span class="fas fa-angle-left"></span> Back to List</a>
 		</div>
 	</div>
 	<div class="card-body">
@@ -65,7 +65,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 					<textarea rows="3" name="description" id="description" class="form-control form-control-sm rounded-0" value="" required><?php echo isset($description) ? $description : ''; ?></textarea>
 				</div>
 				<div class="form-group">
-					<label for="" class="control-label">Music Cover Artwork</label>
+					<label for="" class="control-label">Artwork</label>
 					<div class="custom-file">
 						<input type="file" class="custom-file-input rounded-circle" id="customFile2" name="banner_img" onchange="displayBanner(this,$(this))">
 						<label class="custom-file-label" for="customFile2">Choose file</label>
@@ -135,7 +135,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 			$('.err-msg').remove();
 			start_loader();
 			$.ajax({
-				url: _base_url_ + "classes/Master.php?f=save_music",
+				url: _base_url_ + "classes/Master.php?f=upload_music",
 				data: new FormData($(this)[0]),
 				cache: false,
 				contentType: false,
@@ -151,7 +151,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 				success: function(resp) {
 					if (typeof resp == 'object' && resp.status == 'success') {
 						// location.reload()
-						location.replace("<?= base_url ?>admin/?page=musics/view_music&id=" + resp.mid)
+						location.replace("<?= base_url ?>artist/?page=musics/view_music&id=" + resp.mid)
 					} else if (resp.status == 'failed' && !!resp.msg) {
 						var el = $('<div>')
 						el.addClass("alert alert-danger err-msg").text(resp.msg)

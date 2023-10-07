@@ -1,9 +1,9 @@
-<?php 
+<?php
 $page_title = "Music List";
 $page_description = "";
-if(isset($_GET['cid'])){
+if (isset($_GET['cid'])) {
     $cat_qry = $conn->query("SELECT * FROM `category_list` where `id` = '{$_GET['cid']}' and `delete_flag` = 0 and `status` = 1 ");
-    if($cat_qry->num_rows > 0){
+    if ($cat_qry->num_rows > 0) {
         $result = $cat_qry->fetch_assoc();
         $category_id = $result['id'];
         $page_title = $result['name'];
@@ -14,44 +14,49 @@ if(isset($_GET['cid'])){
 ?>
 
 <style>
-    .music-banner{
+    .music-banner {
         width: 100%;
         height: 35vh;
-        overflow:auto;
+        overflow: auto;
         background: #000;
     }
-    .music-banner img{
+
+    .music-banner img {
         width: 100%;
         height: 100%;
-        object-fit:scale-down;
-        object-position:center center;
+        object-fit: scale-down;
+        object-position: center center;
     }
-    .music-btns{
-        padding:0;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        height:1.5em;
-        width:1.5em;
-        font-size:.5em;
+
+    .music-btns {
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 1.5em;
+        width: 1.5em;
+        font-size: .5em;
         margin: 0 .5em;
     }
-    #player-field{
-        display:none;
-        position:fixed;
-        bottom:0;
-        left:0;
-        min-height:5em;
+
+    #player-field {
+        display: none;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        min-height: 5em;
         width: 100%;
-        background:#000;
-        justify-content:center;
-        align-items:center;
+        background: #000;
+        justify-content: center;
+        align-items: center;
     }
-    #player-slider{
-        width:50%;
-        line-height:.8em;
-        padding:.5em;
+
+    #player-slider {
+        width: 50%;
+        line-height: .8em;
+        padding: .5em;
     }
+
     #progress-container {
         height: 7px;
         width: 100%;
@@ -74,6 +79,7 @@ if(isset($_GET['cid'])){
         justify-content: space-between;
         font-size: 1rem;
     }
+
     button.play-btn {
         height: 2.35em;
         width: 2.5em;
@@ -83,11 +89,13 @@ if(isset($_GET['cid'])){
         align-items: center;
         justify-content: center;
     }
+
     #player-img-holder {
         position: relative;
         width: 12vw;
         height: 13vh;
     }
+
     #player-img-holder img {
         position: absolute;
         bottom: 0;
@@ -97,74 +105,50 @@ if(isset($_GET['cid'])){
         object-position: center center;
         background: #000;
     }
+
     .music-btns i {
         font-size: .7em;
     }
 </style>
-<div class="row">
-    <div class="col-lg-6 col-md-8 col-sm-12 col-xs-12 mx-auto mt-5 mb-3 ">
-        <h1 class="text-center font-weight-bolder title-font"><?= $page_title ?></h1>
-        <hr class="mx-auto bg-primary opacity-100" style="height:2px;opacity:1;width:20%">
-        <?php if(!empty($page_description)): ?>
-            <card class="rounded-0 shadow">
-                <div class="card-body rounded-0">
-                    <div class="container-fluid">
-                        <div class="text-muted"><em><?= $page_description ?></em></div>
-                    </div>
-                </div>
-            </card>
-        <?php endif; ?>
-    </div>
-</div>
 
-<div class="row">
-    <div class="col-lg-6 col-md-8 col-sm-12 col-xs-12 mx-auto mb-5">
-        <div class="input-group mb-3">
-            <input type="search" id="search_cat"  placeholder="Search Here"  class="form-control">
-            <div class="input-group-append">
-                <span class="input-group-text"><i class="fas fa-search"></i></span>
-            </div>
-        </div>
-    </div>
-</div>
 <div class="row">
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mx-auto mb-5">
         <div class="row">
-            <?php 
+            <?php
             $where = "";
-            if(isset($category_id)){
+            if (isset($category_id)) {
                 $where = "and `category_id` = '{$category_id}' ";
             }
             $music_list = $conn->query("SELECT *, COALESCE((SELECT `name` FROM `category_list` where `music_list`.`category_id` = `category_list`.`id`), 'Unkown Category') as `category_name` FROM `music_list` where `status` = 1 and `delete_flag` = 0 and `audio_path` != ''  {$where} order by `title` asc");
-            while($row = $music_list->fetch_assoc()):
+            while ($row = $music_list->fetch_assoc()) :
             ?>
-            <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 mb-3 cat-items">
-                <div class="card rounded-0 card-outline card-primary  h-100">
-                    <div class="card-img-top music-banner">
-                        <img src="<?= validate_image($row['banner_path']) ?>" alt="<?= $row['title'] ?>">
-                    </div>
-                    <div class="card-body rounded-0">
-                        <div class="container-fluid">
-                            <div>
-                                <h2 class="rounded-0 card-title-font text-center w-100"><b><?= $row['title'] ?></b></h2>
-                            </div>
-                            <div>
-                                <div class="truncate">
-                                    <?= str_replace("\n", "<br>", html_entity_decode($row['description'])) ?>
-                                </div>
-                            </div>
-                            
+                <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 mb-3 cat-items">
+                    <div class="card rounded-0 card-outline card-primary  h-100">
+                        <div class="card-img-top music-banner">
+                            <img src="<?= validate_image($row['banner_path']) ?>" alt="<?= $row['title'] ?>">
                         </div>
-                    </div>
-                    <div class="card-footer text-right">
-                        <div class="row justify-content-end">
-                            <a href="<?= base_url.$row['audio_path'] ?>" download="<?= $row['title'].".".(pathinfo($row['audio_path'], PATHINFO_EXTENSION)) ?>" class="btn btn-sm btn-outline-success rounded-circle p-0 music-btns"><i class="fa fa-download"></i></a>
-                            <a href="javascript:void(0)" data-id="<?= $row['id'] ?>" class="btn btn-sm btn-outline-primary rounded-circle p-0 music-btns play_music"><i class="fa fa-play"></i></a>
-                            <a href="javascript:void(0)" data-id="<?= $row['id'] ?>" class="btn btn-sm btn-outline-info rounded-circle p-0 music-btns view_music_details"><i class="fa fa-info"></i></a>
+                        <div class="card-body rounded-0">
+                            <div class="container-fluid">
+                                <div>
+                                    <h2 class="rounded-0 card-title-font text-center w-100"><b><?= $row['title'] ?></b></h2>
+                                </div>
+                                <div>
+                                    <div class="truncate">
+                                        <?= str_replace("\n", "<br>", html_entity_decode($row['description'])) ?>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="card-footer text-right">
+                            <div class="row justify-content-end">
+                                <a href="<?= base_url . $row['audio_path'] ?>" download="<?= $row['title'] . "." . (pathinfo($row['audio_path'], PATHINFO_EXTENSION)) ?>" class="btn btn-sm btn-outline-success rounded-circle p-0 music-btns"><i class="fa fa-download"></i></a>
+                                <a href="javascript:void(0)" data-id="<?= $row['id'] ?>" class="btn btn-sm btn-outline-primary rounded-circle p-0 music-btns play_music"><i class="fa fa-play"></i></a>
+                                <a href="javascript:void(0)" data-id="<?= $row['id'] ?>" class="btn btn-sm btn-outline-info rounded-circle p-0 music-btns view_music_details"><i class="fa fa-info"></i></a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
             <?php endwhile; ?>
         </div>
     </div>
@@ -172,7 +156,7 @@ if(isset($_GET['cid'])){
 <div id="player-field">
     <div>
         <div id="player-img-holder">
-            <img src="<?= validate_image("") ?>" alt=""/>
+            <img src="<?= validate_image("") ?>" alt="" />
         </div>
     </div>
     <div>
@@ -206,45 +190,45 @@ if(isset($_GET['cid'])){
     const play = document.getElementById('play');
     var volume = .5;
     disc.volume = volume
-    $(function(){
-        $('#search_cat').on('input change', function(e){
+    $(function() {
+        $('#search_cat').on('input change', function(e) {
             e.preventDefault()
             var _search = $(this).val().toLowerCase()
 
-            $('.cat-items').each(function(e){
+            $('.cat-items').each(function(e) {
                 var _text = $(this).text().toLowerCase()
-                if(_text.includes(_search) === true){
+                if (_text.includes(_search) === true) {
                     $(this).toggle(true)
-                }else{
+                } else {
                     $(this).toggle(false)
                 }
             })
         })
-        $('.view_music_details').click(function(e){
+        $('.view_music_details').click(function(e) {
             e.preventDefault()
             var id = $(this).attr('data-id')
-            uni_modal("Music Details", "<?= base_url."view_music_details.php?id=" ?>"+id,"modal-large")
+            uni_modal("Music Details", "<?= base_url . "view_music_details.php?id=" ?>" + id, "modal-large")
         })
 
-        $('.play_music').click(function(e){
+        $('.play_music').click(function(e) {
             e.preventDefault()
             var id = $(this).attr('data-id')
             start_loader()
             $.ajax({
-                url:_base_url_+"classes/Master.php?f=get_music_details&id="+id,
-                dataType:"JSON",
-                error: err=>{
+                url: _base_url_ + "classes/Master.php?f=get_music_details&id=" + id,
+                dataType: "JSON",
+                error: err => {
                     alert("There's an error occurred while fetching the audio file.")
                     end_loader()
                     console.error(err)
-                    
+
                 },
-                success:function(resp){
-                    if(typeof resp == 'object'){
+                success: function(resp) {
+                    if (typeof resp == 'object') {
                         loadSong(resp)
                         end_loader()
                         $('#player-field').css('display', "flex")
-                    }else{
+                    } else {
                         alert("There's an error occurred while fetching the audio file.")
                         end_loader()
                         console.error(resp)
@@ -252,19 +236,20 @@ if(isset($_GET['cid'])){
                 }
             })
         })
-        $('#play').click(function(e){
+        $('#play').click(function(e) {
             e.preventDefault()
             playPauseMedia()
         })
-        $('#volume-down').click(function(e){
+        $('#volume-down').click(function(e) {
             e.preventDefault()
             change_volume();
         })
-        $('#volume-up').click(function(e){
+        $('#volume-up').click(function(e) {
             e.preventDefault()
             change_volume("up");
         })
     })
+
     function loadSong(song) {
         var dur = 0;
         banner_img.src = song.coverPath;
@@ -281,6 +266,7 @@ if(isset($_GET['cid'])){
         })
         playPauseMedia()
     }
+
     function playPauseMedia() {
         if (disc.paused) {
             disc.play();
@@ -318,39 +304,39 @@ if(isset($_GET['cid'])){
         timer.textContent = '0:00';
     }
     // Navigate song slider
-function progressSlider(ev) {
-    var is_playing = !disc.paused
-    if (is_playing)
-        disc.pause()
-    const totalWidth = this.clientWidth;
-    const clickWidth = ev.offsetX;
-    const clickWidthRatio = clickWidth / totalWidth;
-    disc.currentTime = clickWidthRatio * disc.duration;
-    if (is_playing)
-        disc.play()
-    document.addEventListener('mousemove', slideMoving);
-    document.addEventListener('mouseup', function() {
+    function progressSlider(ev) {
+        var is_playing = !disc.paused
+        if (is_playing)
+            disc.pause()
+        const totalWidth = this.clientWidth;
+        const clickWidth = ev.offsetX;
+        const clickWidthRatio = clickWidth / totalWidth;
+        disc.currentTime = clickWidthRatio * disc.duration;
         if (is_playing)
             disc.play()
-        document.removeEventListener('mousemove', slideMoving);
-    });
+        document.addEventListener('mousemove', slideMoving);
+        document.addEventListener('mouseup', function() {
+            if (is_playing)
+                disc.play()
+            document.removeEventListener('mousemove', slideMoving);
+        });
 
-}
-
-function change_volume($dir = "down"){
-        var vol = volume * 10
-    if($dir == "down"){
-        vol--;
-        if(vol <= 0)
-        vol = 0;
-    }else{
-        vol++;
-        if(vol >= 10)
-        vol = 10;
     }
-    volume = vol / 10
+
+    function change_volume($dir = "down") {
+        var vol = volume * 10
+        if ($dir == "down") {
+            vol--;
+            if (vol <= 0)
+                vol = 0;
+        } else {
+            vol++;
+            if (vol >= 10)
+                vol = 10;
+        }
+        volume = vol / 10
         disc.volume = volume
-}
+    }
 
     // Navigate song slider while moving
     function slideMoving(ev) {
@@ -364,7 +350,8 @@ function change_volume($dir = "down"){
         if (is_playing)
             disc.play()
     }
-    function song_ended(){
+
+    function song_ended() {
         $('#player-field').hide()
         console.log('audio ended')
     }

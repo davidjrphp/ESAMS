@@ -1,32 +1,25 @@
 <?php ob_start(); ?>
+<?php require_once('../config.php'); ?>
 <!DOCTYPE html>
 <html lang="en" class="" style="height: auto;">
-<?php
-if (!isset($_SESSION['login_id']))
-  header('location:login.php');
-include 'db_connect.php';
-ob_start();
-if (!isset($_SESSION['system'])) {
+<!-- <?php require_once('inc/header2.php') ?> -->
 
-  $system = $conn->query("SELECT * FROM system_settings")->fetch_array();
-  foreach ($system as $k => $v) {
-    $_SESSION['system'][$k] = $v;
-  }
-}
-ob_end_flush();
-?>
-<?php require_once('header2.php') ?>
-
-<body class="layout-top-nav layout-fixed control-sidebar-slide-open layout-navbar-fixed text-sm dark-mode" data-new-gr-c-s-check-loaded="14.991.0" data-gr-ext-installed="" style="height: auto;">
+<body class="sidebar-mini layout-fixed control-sidebar-slide-open layout-navbar-fixed sidebar-mini-md sidebar-mini-xs text-sm dark-mode" data-new-gr-c-s-check-loaded="14.991.0" data-gr-ext-installed="" style="height: auto;">
   <div class="wrapper">
-    <?php require_once('topBarNav.php') ?>
+    <?php require_once('inc/topBarNav.php') ?>
+    <?php require_once('inc/navigation.php') ?>
+    <?php if ($_settings->chk_flashdata('success')) : ?>
+      <script>
+        alert_toast("<?php echo $_settings->flashdata('success') ?>", 'success')
+      </script>
+    <?php endif; ?>
     <?php $page = isset($_GET['page']) ? $_GET['page'] : 'home';  ?>
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper  pt-3" style="min-height: 567.854px;">
 
       <!-- Main content -->
       <section class="content">
-        <div class="container container-md-fluid container-sm-fluid">
+        <div class="container-fluid">
           <?php
           if (!file_exists($page . ".php") && !is_dir($page)) {
             include '404.html';
@@ -45,7 +38,6 @@ ob_end_flush();
           <div class="modal-content rounded-0">
             <div class="modal-header">
               <h5 class="modal-title"></h5>
-              <a class="text-muted" href="javascript:void(0)" data-dismiss="modal"><i class="fa fa-times"></i></a>
             </div>
             <div class="modal-body">
             </div>

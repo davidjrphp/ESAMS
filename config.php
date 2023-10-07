@@ -9,11 +9,17 @@ require_once('classes/DBConnection.php');
 require_once('classes/SystemSettings.php');
 $db = new DBConnection;
 $conn = $db->conn;
-function redirect($url = '')
+function redirect($url = '', $module = '')
 {
-    if (!empty($url))
-        echo '<script>location.href="' . base_url . $url . '"</script>';
+    if (!empty($url)) {
+        $targetUrl = base_url . $url;
+        if (!empty($module)) {
+            $targetUrl .= "?module=" . $module; // Add module parameter
+        }
+        echo '<script>location.href="' . $targetUrl . '"</script>';
+    }
 }
+
 function validate_image($file)
 {
     global $_settings;

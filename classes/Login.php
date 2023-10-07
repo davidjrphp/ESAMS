@@ -46,37 +46,6 @@ class Login extends DBConnection
 			redirect('admin/login.php');
 		}
 	}
-	function login_artist()
-	{
-		extract($_POST);
-		$stmt = $this->conn->prepare("SELECT * from artist_list where email = ? and `password` = ? ");
-		$password = md5($password);
-		$stmt->bind_param('ss', $email, $password);
-		$stmt->execute();
-		$result = $stmt->get_result();
-		if ($result->num_rows > 0) {
-			$res = $result->fetch_array();
-			foreach ($res as $k => $v) {
-				$this->settings->set_userdata($k, $v);
-			}
-			$this->settings->set_userdata('login_type', 2);
-			$resp['status'] = 'success';
-		} else {
-			$resp['status'] = 'failed';
-			$resp['msg'] = 'Incorrect Email or Password';
-		}
-		if ($this->conn->error) {
-			$resp['status'] = 'failed';
-			$resp['_error'] = $this->conn->error;
-		}
-		return json_encode($resp);
-	}
-	public function logout_artist()
-	{
-		if ($this->settings->sess_des()) {
-			redirect('artist/login.php');
-		}
-	}
 }
 $action = !isset($_GET['f']) ? 'none' : strtolower($_GET['f']);
 $auth = new Login();
@@ -87,12 +56,7 @@ switch ($action) {
 	case 'logout':
 		echo $auth->logout();
 		break;
-	case 'login_customer':
-		echo $auth->login_artist();
-		break;
-	case 'logout_customer':
-		echo $auth->logout_artist();
-		break;
+
 	default:
 		echo $auth->index();
 		break;

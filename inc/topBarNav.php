@@ -38,17 +38,12 @@
 
       <div class="d-flex align-items-center ">
         <button class="btn btn-block btn-md btn-default btn-dark-purple border-primary login">
-          <a class="font-weight-bolder text-light mx-2 text-decoration-none" href="./artist">Login</a>
+          <a class="font-weight-bolder text-light mx-2 text-decoration-none" style="font-size: 20px" href="./artist/login.php">For Artists</a>
         </button>
       </div>
       <div class="d-flex align-items-center ">
         <button class="btn btn-block btn-md btn-default btn-dark-purple border-primary login">
-          <a class="font-weight-bolder text-light mx-2 text-decoration-none" href="./admin">Admin Login</a>
-        </button>
-      </div>
-      <div class="d-flex align-items-center login-button">
-        <button class="btn btn-block btn-md btn-default btn-light btn-light-purple border-primary login">
-          <a class="font-weight-bolder text-light mx-2 text-decoration-none" href="./">Sign Up</a>
+          <a class="font-weight-bolder text-light mx-2 text-decoration-none" style="font-size: 20px" href="./admin/login.php">Admin</a>
         </button>
       </div>
     </div>

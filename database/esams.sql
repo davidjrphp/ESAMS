@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 10, 2023 at 12:51 PM
+-- Generation Time: Oct 02, 2023 at 05:27 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.29
 
@@ -18,22 +18,36 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `music_db`
+-- Database: `esams`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `artist`
+-- Table structure for table `artist_list`
 --
 
-CREATE TABLE `artist` (
-  `id` bigint(20) NOT NULL,
-  `email` varchar(250) NOT NULL,
-  `full_name` text NOT NULL,
-  `music_label` varchar(250) NOT NULL,
-  `country` text NOT NULL
+CREATE TABLE `artist_list` (
+  `id` int(30) NOT NULL,
+  `firstname` varchar(100) NOT NULL,
+  `lastname` varchar(100) NOT NULL,
+  `stage_name` varchar(200) NOT NULL,
+  `email` varchar(200) NOT NULL,
+  `password` text NOT NULL,
+  `sex` varchar(20) NOT NULL,
+  `DOB` date DEFAULT NULL,
+  `about_artist` varchar(100) NOT NULL,
+  `type` tinyint(1) NOT NULL DEFAULT 0,
+  `avatar` text DEFAULT NULL,
+  `date_created` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `artist_list`
+--
+
+INSERT INTO `artist_list` (`id`, `firstname`, `lastname`, `stage_name`, `email`, `password`, `sex`, `DOB`, `about_artist`, `type`, `avatar`, `date_created`) VALUES
+(5, 'David', 'Mwelwa', 'The Priest', 'davidgarciajr955@gmail.com', '55fc5b709962876903785fd64a6961e5', '', '1996-08-05', '', 1, NULL, '2023-08-28 17:28:07');
 
 -- --------------------------------------------------------
 
@@ -77,7 +91,8 @@ CREATE TABLE `music_list` (
   `description` text NOT NULL,
   `banner_path` text NOT NULL,
   `audio_path` text NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `status` tinyint(1) NOT NULL DEFAULT 1 COMMENT '0=Pending, 1=Active, 2=Inactive',
+  `streams` int(50) NOT NULL,
   `delete_flag` tinyint(1) NOT NULL DEFAULT 0,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp()
@@ -87,12 +102,24 @@ CREATE TABLE `music_list` (
 -- Dumping data for table `music_list`
 --
 
-INSERT INTO `music_list` (`id`, `title`, `artist`, `category_id`, `description`, `banner_path`, `audio_path`, `status`, `delete_flag`, `created_at`, `updated_at`) VALUES
-(3, 'test', 'test', 4, 'test', 'uploads/music_banners/banner3_1.jpg', '', 1, 1, '2023-01-27 11:44:10', '2023-05-07 03:04:23'),
-(4, 'My Way', 'Emmy The Priest feat. Tama', 6, 'Inspirational Rap music written by Emmy The Priest and Produced by a gifted beats smith Skills of the PhatJam Records. The track was released on 16 October 2021', 'uploads/music_banners/banner4_1.jpeg', 'uploads/audio/The Priest - My Way-1_1.mp3', 1, 0, '2023-05-07 03:02:55', '2023-05-07 03:02:56'),
-(5, 'Zigolo', 'Jivan &amp; Zack 1\'3', 6, 'Hip-Hop banger by Jivan and Zack 1\'3 called Zogolo wonderfully produced by Skills of the PhatJam Records', 'uploads/music_banners/banner5_2.jpg', 'uploads/audio/Jivan & Zaq-Zigolo-Prod.-By-Skillz_1.mp3', 1, 0, '2023-05-07 03:28:55', '2023-05-07 03:28:57'),
-(6, 'Rap Revolution', 'The Priest, Jivan &amp; Laguna BK', 6, 'A Hip-Hop Track done by The Echo Sound Arts Crew in the quest to devise the Rap game and was written by Emmy The Priest. The banger was produced by Vent and Nino', 'uploads/music_banners/banner4_1_1.jpg', 'uploads/audio/Rap Revolution_1.mp3', 1, 0, '2023-05-07 03:33:04', '2023-05-07 03:33:05'),
-(7, 'Black Oceans', 'Emmy The Priest', 6, 'A track Done by The Priest to reveal the untold mysteries of the Rap Game. Written and produced by The Priest', 'uploads/music_banners/banner5_1_1.jpg', 'uploads/audio/BLACK OCEANS_1.mp3', 1, 0, '2023-05-07 03:36:37', '2023-05-07 03:36:38');
+INSERT INTO `music_list` (`id`, `title`, `artist`, `category_id`, `description`, `banner_path`, `audio_path`, `status`, `streams`, `delete_flag`, `created_at`, `updated_at`) VALUES
+(4, 'My Way', 'Emmy The Priest feat. Tama', 6, 'Inspirational Rap music written by Emmy The Priest and Produced by a gifted beats smith Skills of the PhatJam Records. The track was released on 16 October 2021', 'uploads/music_banners/banner4_1.jpeg', 'uploads/audio/The Priest - My Way-1_1.mp3', 1, 0, 0, '2023-05-07 03:02:55', '2023-05-07 03:02:56'),
+(5, 'Zigolo', 'Jivan &amp; Zack 1\'3', 6, 'Hip-Hop banger by Jivan and Zack 1\'3 called Zogolo wonderfully produced by Skills of the PhatJam Records', 'uploads/music_banners/banner5_2.jpg', 'uploads/audio/Jivan & Zaq-Zigolo-Prod.-By-Skillz_1.mp3', 1, 0, 0, '2023-05-07 03:28:55', '2023-05-07 03:28:57'),
+(6, 'Rap Revolution', 'The Priest, Jivan &amp; Laguna BK', 6, 'A Hip-Hop Track done by The Echo Sound Arts Crew in the quest to devise the Rap game and was written by Emmy The Priest. The banger was produced by Vent and Nino', 'uploads/music_banners/banner4_1_1.jpg', 'uploads/audio/Rap Revolution_1.mp3', 1, 0, 0, '2023-05-07 03:33:04', '2023-05-07 03:33:05'),
+(7, 'Black Oceans', 'Emmy The Priest', 6, 'A track Done by The Priest to reveal the untold mysteries of the Rap Game. Written and produced by The Priest', 'uploads/music_banners/banner5_1_1.jpg', 'uploads/audio/BLACK OCEANS_1.mp3', 1, 0, 0, '2023-05-07 03:36:37', '2023-05-07 03:36:38');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `stream_counter`
+--
+
+CREATE TABLE `stream_counter` (
+  `id` int(50) NOT NULL,
+  `artist_id` int(50) NOT NULL,
+  `num_streams` int(50) NOT NULL,
+  `date_updated` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -147,17 +174,16 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `firstname`, `middlename`, `lastname`, `username`, `password`, `avatar`, `last_login`, `type`, `date_added`, `date_updated`) VALUES
 (1, 'David', '', 'Mwelwa', 'priest', '80298f4f83ade66920bc8521cb63ff80', 'uploads/avatars/1.png?v=1649834664', NULL, 1, '2021-01-20 14:02:37', '2023-02-24 15:45:39'),
-(3, 'Sandy', 'Kabuswe', 'Moyo', 'smoyo', '12345678', NULL, NULL, 0, '2023-03-17 07:36:01', '2023-03-17 07:36:01'),
-(4, 'David', '', 'Mwelwa', 'priest', '80298f4f83ade66920bc8521cb63ff80', 'uploads/avatars/4.png?v=1683455041', NULL, 0, '2023-05-07 03:24:01', '2023-05-07 03:24:01');
+(5, 'Angela', '', 'Zulu', 'azulu', 'f495b400db54e6dec5bf2a7f6d40fd56', NULL, NULL, 2, '2023-09-15 10:40:02', '2023-09-15 10:40:02');
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `artist`
+-- Indexes for table `artist_list`
 --
-ALTER TABLE `artist`
+ALTER TABLE `artist_list`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -189,10 +215,10 @@ ALTER TABLE `users`
 --
 
 --
--- AUTO_INCREMENT for table `artist`
+-- AUTO_INCREMENT for table `artist_list`
 --
-ALTER TABLE `artist`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `artist_list`
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `category_list`
@@ -216,7 +242,7 @@ ALTER TABLE `system_info`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

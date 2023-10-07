@@ -1,78 +1,85 @@
 <?php
 require_once '../config.php';
-class Login2 extends DBConnection {
+class Login2 extends DBConnection
+{
 	private $settings;
-	public function __construct(){
+	public function __construct()
+	{
 		global $_settings;
 		$this->settings = $_settings;
 
 		parent::__construct();
 		ini_set('display_error', 1);
 	}
-	public function __destruct(){
+	public function __destruct()
+	{
 		parent::__destruct();
 	}
-	public function index(){
-		echo "<h1>Access Denied</h1> <a href='".base_url."'>Go Back.</a>";
+	public function index()
+	{
+		echo "<h1>Access Denied</h1> <a href='" . base_url . "'>Go Back.</a>";
 	}
-	public function login(){
+	public function login()
+	{
 		extract($_POST);
 
-		$stmt = $this->conn->prepare("SELECT * from users where username = ? and password = ? ");
+		$stmt = $this->conn->prepare("SELECT * from artist_list where email = ? and password = ? ");
 		$password = md5($password);
-		$stmt->bind_param('ss',$username,$password);
+		$stmt->bind_param('ss', $email, $password);
 		$stmt->execute();
 		$result = $stmt->get_result();
-		if($result->num_rows > 0){
-			foreach($result->fetch_array() as $k => $v){
-				if(!is_numeric($k) && $k != 'password'){
-					$this->settings->set_userdata($k,$v);
+		if ($result->num_rows > 0) {
+			foreach ($result->fetch_array() as $k => $v) {
+				if (!is_numeric($k) && $k != 'password') {
+					$this->settings->set_userdata($k, $v);
 				}
-
 			}
-			$this->settings->set_userdata('login_type',1);
-		return json_encode(array('status'=>'success'));
-		}else{
-		return json_encode(array('status'=>'incorrect','last_qry'=>"SELECT * from users where username = '$username' and password = md5('$password') "));
+			$this->settings->set_userdata('login_type', 1);
+			return json_encode(array('status' => 'success'));
+		} else {
+			return json_encode(array('status' => 'incorrect', 'last_qry' => "SELECT * from artist_list where email = '$email' and password = md5('$password') "));
 		}
 	}
-	public function logout(){
-		if($this->settings->sess_des()){
-			redirect('artist/login2.php');
+	public function logout()
+	{
+		if ($this->settings->sess_des()) {
+			redirect('artist/login.php');
 		}
 	}
-	function login_customer(){
+	function login_customer()
+	{
 		extract($_POST);
 		$stmt = $this->conn->prepare("SELECT * from customer_list where email = ? and `password` = ? ");
 		$password = md5($password);
-		$stmt->bind_param('ss',$email,$password);
+		$stmt->bind_param('ss', $email, $password);
 		$stmt->execute();
 		$result = $stmt->get_result();
-		if($result->num_rows > 0){
+		if ($result->num_rows > 0) {
 			$res = $result->fetch_array();
-			foreach($res as $k => $v){
-				$this->settings->set_userdata($k,$v);
+			foreach ($res as $k => $v) {
+				$this->settings->set_userdata($k, $v);
 			}
-			$this->settings->set_userdata('login_type',2);
+			$this->settings->set_userdata('login_type', 2);
 			$resp['status'] = 'success';
-		}else{
+		} else {
 			$resp['status'] = 'failed';
 			$resp['msg'] = 'Incorrect Email or Password';
 		}
-		if($this->conn->error){
+		if ($this->conn->error) {
 			$resp['status'] = 'failed';
 			$resp['_error'] = $this->conn->error;
 		}
 		return json_encode($resp);
 	}
-	public function logout_customer(){
-		if($this->settings->sess_des()){
+	public function logout_customer()
+	{
+		if ($this->settings->sess_des()) {
 			redirect('?');
 		}
 	}
 }
 $action = !isset($_GET['f']) ? 'none' : strtolower($_GET['f']);
-$auth = new Login();
+$auth = new Login2();
 switch ($action) {
 	case 'login':
 		echo $auth->login();
@@ -80,14 +87,8 @@ switch ($action) {
 	case 'logout':
 		echo $auth->logout();
 		break;
-	case 'login_customer':
-		echo $auth->login_customer();
-		break;
-	case 'logout_customer':
-		echo $auth->logout_customer();
-		break;
+
 	default:
 		echo $auth->index();
 		break;
 }
-

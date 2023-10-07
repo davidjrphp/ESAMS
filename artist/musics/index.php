@@ -15,13 +15,13 @@
 	<div class="card-header">
 		<h3 class="card-title">Your Music</h3>
 		<div class="card-tools">
-			<a href="./?page=musics/manage_music" class="btn btn-flat btn-primary"><span class="fas fa-plus-square"></span> Add New</a>
+			<a href="./?page=musics/manage_music" class="btn btn-flat btn-primary"><span class="fas fa-plus-square"></span> New Upload</a>
 		</div>
 	</div>
 	<div class="card-body">
 		<div class="container-fluid">
 			<div class="table-responsive">
-				<table class="table table-sm table-hover table-striped table-bordered" id="list">
+				<table class="table table-sm table-hover table-bordered" id="list">
 					<colgroup>
 						<col width="5%">
 						<col width="15%">
