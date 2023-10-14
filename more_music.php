@@ -264,31 +264,49 @@ if (isset($_GET['cid'])) {
                         })
 
                         $('.play_music').click(function(e) {
-                            e.preventDefault()
-                            var id = $(this).attr('data-id')
-                            start_loader()
+                            e.preventDefault();
+                            var id = $(this).attr('data-id');
+                            start_loader();
                             $.ajax({
                                 url: _base_url_ + "classes/Master.php?f=get_music_details&id=" + id,
                                 dataType: "JSON",
                                 error: err => {
-                                    alert("There's an error occurred while fetching the audio file.")
-                                    end_loader()
-                                    console.error(err)
-
+                                    alert("There's an error occurred while fetching the audio file.");
+                                    end_loader();
+                                    console.error(err);
                                 },
                                 success: function(resp) {
                                     if (typeof resp == 'object') {
-                                        loadSong(resp)
-                                        end_loader()
-                                        $('#player-field').css('display', "flex")
+                                        // Load the song details
+                                        loadSong(resp);
+                                        end_loader();
+                                        $('#player-field').css('display', "flex");
+
+                                        updateStreams(id);
                                     } else {
-                                        alert("There's an error occurred while fetching the audio file.")
-                                        end_loader()
-                                        console.error(resp)
+                                        alert("There's an error occurred while fetching the audio file.");
+                                        end_loader();
+                                        console.error(resp);
                                     }
                                 }
-                            })
-                        })
+                            });
+                        });
+
+                        function updateStreams(id) {
+                            $.ajax({
+                                url: "classes/update_stream.php",
+                                type: "POST",
+                                data: {
+                                    id: id
+                                },
+                                success: function(response) {
+                                    console.log("Streams updated successfully.");
+                                },
+                                error: function(error) {
+                                    console.error("Failed to update streams: " + error);
+                                }
+                            });
+                        }
                         $('#play').click(function(e) {
                             e.preventDefault()
                             playPauseMedia()
@@ -418,6 +436,20 @@ if (isset($_GET['cid'])) {
 
                     // Move to different place in the song
                     progressContainer.addEventListener('mousedown', progressSlider);
+
+                    $('#search_cat').on('input change', function(e) {
+                        e.preventDefault()
+                        var _search = $(this).val().toLowerCase()
+
+                        $('.cat-items').each(function(e) {
+                            var _text = $(this).text().toLowerCase()
+                            if (_text.includes(_search) === true) {
+                                $(this).toggle(true)
+                            } else {
+                                $(this).toggle(false)
+                            }
+                        })
+                    })
                 </script>
 
             </div>

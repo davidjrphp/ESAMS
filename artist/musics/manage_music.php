@@ -40,6 +40,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 		<div class="container-fluid">
 			<form action="" id="music-form">
 				<input type="hidden" name="id" value="<?php echo isset($id) ? $id : '' ?>">
+				<input type="hidden" name="artist_id" value="<?php echo isset($_SESSION['userdata']['id']) ? $_SESSION['userdata']['id'] : ''; ?>">
 				<div class="form-group">
 					<label for="title" class="control-label">Title</label>
 					<input type="text" name="title" id="title" class="form-control form-control-sm rounded-0" value="<?php echo isset($title) ? $title : ''; ?>" required />

@@ -257,7 +257,7 @@ class Master extends DBConnection
 			$resp['mid'] = $mid;
 			$resp['status'] = 'success';
 			if (empty($id))
-				$resp['msg'] = "Your Upload is successful.";
+				$resp['msg'] = "Your Upload was successful.";
 			else
 				$resp['msg'] = " Song successfully updated.";
 
@@ -372,9 +372,6 @@ class Master extends DBConnection
 			$this->settings->set_flashdata('success', $resp['msg']);
 		return json_encode($resp);
 	}
-
-
-
 	function delete_music()
 	{
 		extract($_POST);

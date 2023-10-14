@@ -118,6 +118,111 @@ class Artists extends DBConnection
 
         return json_encode($resp);
     }
+
+    public function save_artists()
+    {
+        if (empty($_POST['password']))
+            unset($_POST['password']);
+        else
+            $_POST['password'] = md5($_POST['password']);
+        extract($_POST);
+        $data = '';
+        foreach ($_POST as $k => $v) {
+            if (!in_array($k, array('id'))) {
+                if (!empty($data)) $data .= " , ";
+                $data .= " {$k} = '{$v}' ";
+            }
+        }
+        if (empty($id)) {
+            $qry = $this->conn->query("INSERT INTO artist_list set {$data}");
+            if ($qry) {
+                $id = $this->conn->insert_id;
+                $this->settings->set_flashdata('success', 'Saved successfully.');
+                foreach ($_POST as $k => $v) {
+                    if ($k != 'id') {
+                        if (!empty($data)) $data .= " , ";
+                        if ($this->settings->userdata('id') == $id)
+                            $this->settings->set_userdata($k, $v);
+                    }
+                }
+                if (!empty($_FILES['img']['tmp_name'])) {
+                    if (!is_dir(base_app . "uploads/avatars"))
+                        mkdir(base_app . "uploads/avatars");
+                    $ext = pathinfo($_FILES['img']['name'], PATHINFO_EXTENSION);
+                    $fname = "uploads/avatars/$id.png";
+                    $accept = array('image/jpeg', 'image/png');
+                    if (!in_array($_FILES['img']['type'], $accept)) {
+                        $err = "Image file type is invalid";
+                    }
+                    if ($_FILES['img']['type'] == 'image/jpeg')
+                        $uploadfile = imagecreatefromjpeg($_FILES['img']['tmp_name']);
+                    elseif ($_FILES['img']['type'] == 'image/png')
+                        $uploadfile = imagecreatefrompng($_FILES['img']['tmp_name']);
+                    if (!$uploadfile) {
+                        $err = "Image is invalid";
+                    }
+                    $temp = imagescale($uploadfile, 200, 200);
+                    if (is_file(base_app . $fname))
+                        unlink(base_app . $fname);
+                    $upload = imagepng($temp, base_app . $fname);
+                    if ($upload) {
+                        $this->conn->query("UPDATE `artist_list` set `avatar` = CONCAT('{$fname}', '?v=',unix_timestamp(CURRENT_TIMESTAMP)) where id = '{$id}'");
+                        if ($this->settings->userdata('id') == $id)
+                            $this->settings->set_userdata('avatar', $fname . "?v=" . time());
+                    }
+
+                    imagedestroy($temp);
+                }
+                return 1;
+            } else {
+                return 2;
+            }
+        } else {
+            $qry = $this->conn->query("UPDATE artist_list set $data where id = {$id}");
+            if ($qry) {
+                $this->settings->set_flashdata('success', 'Successfully updated.');
+                foreach ($_POST as $k => $v) {
+                    if ($k != 'id') {
+                        if (!empty($data)) $data .= " , ";
+                        if ($this->settings->userdata('id') == $id)
+                            $this->settings->set_userdata($k, $v);
+                    }
+                }
+                if (!empty($_FILES['img']['tmp_name'])) {
+                    if (!is_dir(base_app . "uploads/avatars"))
+                        mkdir(base_app . "uploads/avatars");
+                    $ext = pathinfo($_FILES['img']['name'], PATHINFO_EXTENSION);
+                    $fname = "uploads/avatars/$id.png";
+                    $accept = array('image/jpeg', 'image/png');
+                    if (!in_array($_FILES['img']['type'], $accept)) {
+                        $err = "Image file type is invalid";
+                    }
+                    if ($_FILES['img']['type'] == 'image/jpeg')
+                        $uploadfile = imagecreatefromjpeg($_FILES['img']['tmp_name']);
+                    elseif ($_FILES['img']['type'] == 'image/png')
+                        $uploadfile = imagecreatefrompng($_FILES['img']['tmp_name']);
+                    if (!$uploadfile) {
+                        $err = "Image is invalid";
+                    }
+                    $temp = imagescale($uploadfile, 200, 200);
+                    if (is_file(base_app . $fname))
+                        unlink(base_app . $fname);
+                    $upload = imagepng($temp, base_app . $fname);
+                    if ($upload) {
+                        $this->conn->query("UPDATE `artist_list` set `avatar` = CONCAT('{$fname}', '?v=',unix_timestamp(CURRENT_TIMESTAMP)) where id = '{$id}'");
+                        if ($this->settings->userdata('id') == $id)
+                            $this->settings->set_userdata('avatar', $fname . "?v=" . time());
+                    }
+
+                    imagedestroy($temp);
+                }
+
+                return 1;
+            } else {
+                return "UPDATE artist_list set $data where id = {$id}";
+            }
+        }
+    }
 }
 
 $artists = new artists();
@@ -125,6 +230,9 @@ $action = !isset($_GET['f']) ? 'none' : strtolower($_GET['f']);
 switch ($action) {
     case 'registration':
         echo $artists->registration();
+        break;
+    case 'save':
+        echo $artists->save_artists();
         break;
     case 'delete_customer':
         echo $users->delete_customer();

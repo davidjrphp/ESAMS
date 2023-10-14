@@ -119,7 +119,7 @@ if (isset($_GET['cid'])) {
             if (isset($category_id)) {
                 $where = "and `category_id` = '{$category_id}' ";
             }
-            $music_list = $conn->query("SELECT *, COALESCE((SELECT `name` FROM `category_list` where `music_list`.`category_id` = `category_list`.`id`), 'Unkown Category') as `category_name` FROM `music_list` where `status` = 1 and `delete_flag` = 0 and `audio_path` != ''  {$where} order by `title` asc");
+            $music_list = $conn->query("SELECT *, COALESCE((SELECT `name` FROM `category_list` where `music_list`.`category_id` = `category_list`.`id`), 'Unkown Category') as `category_name` FROM `music_list` where `status` = 1 and `delete_flag` = 0 and `audio_path` != ''  {$where} and `artist_id` = '{$_SESSION['userdata']['id']}' order by `title` asc");
             while ($row = $music_list->fetch_assoc()) :
             ?>
                 <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 mb-3 cat-items">
@@ -211,31 +211,51 @@ if (isset($_GET['cid'])) {
         })
 
         $('.play_music').click(function(e) {
-            e.preventDefault()
-            var id = $(this).attr('data-id')
-            start_loader()
+            e.preventDefault();
+            var id = $(this).attr('data-id');
+            start_loader();
             $.ajax({
                 url: _base_url_ + "classes/Master.php?f=get_music_details&id=" + id,
                 dataType: "JSON",
                 error: err => {
-                    alert("There's an error occurred while fetching the audio file.")
-                    end_loader()
-                    console.error(err)
-
+                    alert("There's an error occurred while fetching the audio file.");
+                    end_loader();
+                    console.error(err);
                 },
                 success: function(resp) {
                     if (typeof resp == 'object') {
-                        loadSong(resp)
-                        end_loader()
-                        $('#player-field').css('display', "flex")
+                        // Load the song details
+                        loadSong(resp);
+                        end_loader();
+                        $('#player-field').css('display', "flex");
+
+                        // Send an API request to update streams
+                        updateStreams(id);
                     } else {
-                        alert("There's an error occurred while fetching the audio file.")
-                        end_loader()
-                        console.error(resp)
+                        alert("There's an error occurred while fetching the audio file.");
+                        end_loader();
+                        console.error(resp);
                     }
                 }
-            })
-        })
+            });
+        });
+
+        function updateStreams(id) {
+            // Make an API request to update the streams
+            $.ajax({
+                url: "classes/update_stream.php",
+                type: "POST",
+                data: {
+                    id: id
+                }, // Send the music ID to the API
+                success: function(response) {
+                    console.log("Streams updated successfully.");
+                },
+                error: function(error) {
+                    console.error("Failed to update streams: " + error);
+                }
+            });
+        }
         $('#play').click(function(e) {
             e.preventDefault()
             playPauseMedia()
@@ -361,8 +381,6 @@ if (isset($_GET['cid'])) {
     disc.addEventListener('pause', updatePlayPauseIcon);
     disc.addEventListener('timeupdate', updateProgress);
     disc.addEventListener('ended', song_ended);
-
-
     // Move to different place in the song
     progressContainer.addEventListener('mousedown', progressSlider);
 </script>

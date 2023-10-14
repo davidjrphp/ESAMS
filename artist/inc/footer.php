@@ -59,9 +59,15 @@
   })
 </script>
 <style>
+  .footer {
+    background: #152F4F;
+  }
+
   /* Contact Section Styles */
   #contact {
     position: relative;
+    top: -150px;
+    right: -530px;
     padding: 50px 0;
     color: #fff;
     text-align: center;
@@ -150,7 +156,7 @@
   }
 </style>
 <!-- Footer-->
-<footer class="py-5 bg-dark">
+<footer class="py-5 footer">
   <div class="container">
     <div class="shortName">
       <h1>

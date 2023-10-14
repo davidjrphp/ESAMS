@@ -151,33 +151,6 @@ if (isset($_GET['cid'])) {
 
 <div class="row">
     <div class="col-lg-6 col-md-8 col-sm-12 col-xs-12 mx-auto mt-5 mb-3 ">
-        <h1 class="text-center font-weight-bolder title-font"><?= $page_title ?></h1>
-        <hr class="mx-auto bg-primary opacity-100" style="height:2px;opacity:1;width:20%">
-        <?php if (!empty($page_description)) : ?>
-            <card class="rounded-0 shadow">
-                <div class="card-body rounded-0">
-                    <div class="container-fluid">
-                        <div class="text-muted"><em><?= $page_description ?></em></div>
-                    </div>
-                </div>
-            </card>
-        <?php endif; ?>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-lg-6 col-md-8 col-sm-12 col-xs-12 mx-auto mb-5">
-        <div class="input-group mb-3">
-            <input type="search" id="search_cat" placeholder="Search Here" class="form-control">
-            <div class="input-group-append">
-                <span class="input-group-text"><i class="fas fa-search"></i></span>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-lg-6 col-md-8 col-sm-12 col-xs-12 mx-auto mt-5 mb-3 ">
         <a class="text- text-white text-hover font-weight-bolder title-font view-more" href="index.php?page=more_music">
             <h5>View More</h5>
         </a>
@@ -187,8 +160,6 @@ if (isset($_GET['cid'])) {
 <div class="row">
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mx-auto mb-5">
         <div class="music-carousel-container">
-            <!-- <i class="fa fa-angle-left scroll-arrows scroll-left" id="scroll-left"></i>
-            <i class="fa fa-angle-right scroll-arrows scroll-right" id="scroll-right"></i> -->
             <div class="music-carousel">
                 <?php
                 $where = "";
@@ -295,31 +266,49 @@ if (isset($_GET['cid'])) {
         })
 
         $('.play_music').click(function(e) {
-            e.preventDefault()
-            var id = $(this).attr('data-id')
-            start_loader()
+            e.preventDefault();
+            var id = $(this).attr('data-id');
+            start_loader();
             $.ajax({
                 url: _base_url_ + "classes/Master.php?f=get_music_details&id=" + id,
                 dataType: "JSON",
                 error: err => {
-                    alert("There's an error occurred while fetching the audio file.")
-                    end_loader()
-                    console.error(err)
-
+                    alert("There's an error occurred while fetching the audio file.");
+                    end_loader();
+                    console.error(err);
                 },
                 success: function(resp) {
                     if (typeof resp == 'object') {
-                        loadSong(resp)
-                        end_loader()
-                        $('#player-field').css('display', "flex")
+                        // Load the song details
+                        loadSong(resp);
+                        end_loader();
+                        $('#player-field').css('display', "flex");
+
+                        updateStreams(id);
                     } else {
-                        alert("There's an error occurred while fetching the audio file.")
-                        end_loader()
-                        console.error(resp)
+                        alert("There's an error occurred while fetching the audio file.");
+                        end_loader();
+                        console.error(resp);
                     }
                 }
-            })
-        })
+            });
+        });
+
+        function updateStreams(id) {
+            $.ajax({
+                url: "classes/update_stream.php",
+                type: "POST",
+                data: {
+                    id: id
+                },
+                success: function(response) {
+                    console.log("Streams updated successfully.");
+                },
+                error: function(error) {
+                    console.error("Failed to update streams: " + error);
+                }
+            });
+        }
         $('#play').click(function(e) {
             e.preventDefault()
             playPauseMedia()

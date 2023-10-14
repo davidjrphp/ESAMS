@@ -158,7 +158,7 @@ if (isset($_GET['cid'])) {
                         if (isset($category_id)) {
                             $where = "and `category_id` = '{$category_id}' ";
                         }
-                        $music_list = $conn->query("SELECT *, COALESCE((SELECT `name` FROM `category_list` where `music_list`.`category_id` = `category_list`.`id`), 'Unknown Category') as `category_name` FROM `music_list` where `status` = 1 and `delete_flag` = 0 and `audio_path` != ''  {$where} order by `title` asc");
+                        $music_list = $conn->query("SELECT *, COALESCE((SELECT `name` FROM `category_list` where `music_list`.`category_id` = `category_list`.`id`), 'Unkown Category') as `category_name` FROM `music_list` where `status` = 1 and `delete_flag` = 0 and `audio_path` != ''  {$where} and `artist_id` = '{$_SESSION['userdata']['id']}' order by `streams` desc");
                         while ($row = $music_list->fetch_assoc()) :
                         ?>
                             <div class="music-item">
@@ -172,6 +172,9 @@ if (isset($_GET['cid'])) {
                                         <a href="<?= base_url . $row['audio_path'] ?>" download="<?= $row['title'] . "." . (pathinfo($row['audio_path'], PATHINFO_EXTENSION)) ?>" class="btn btn-md btn-outline-success rounded-circle p-0 music-btns"><i class="fa fa-download"></i></a>&nbsp;&nbsp;
                                         <a href="javascript:void(0)" data-id="<?= $row['id'] ?>" class="btn btn-md btn-outline-primary rounded-circle p-0 music-btns play_music"><i class="fa fa-play"></i></a> &nbsp;&nbsp;
                                         <a href="javascript:void(0)" data-id="<?= $row['id'] ?>" class="btn btn-md btn-outline-info rounded-circle p-0 music-btns view_music_details"><i class="fa fa-info"></i></a>
+                                    </div>
+                                    <div>
+                                        <p class="rounded-0 card-title-font text-center w-100"><b><?= $row['streams'] ?></b></p>
                                     </div>
                                 </div>
                             </div>
@@ -233,7 +236,7 @@ if (isset($_GET['cid'])) {
                         $('.view_music_details').click(function(e) {
                             e.preventDefault()
                             var id = $(this).attr('data-id')
-                            uni_modal("Music Details", "<?= base_url . "view_music_details.php?id=" ?>" + id, "modal-large")
+                            uni_modal("Music Details", "<?= "view_music_details.php?id=" ?>" + id, "modal-large")
                         })
 
                         $('.play_music').click(function(e) {

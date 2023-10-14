@@ -58,9 +58,9 @@
 								<td class=""><?= $row['category_name'] ?></td>
 								<td class="text-center">
 									<?php if ($row['status'] == 1) : ?>
-										<span class="badge badge-success px-3 rounded-pill">Active</span>
+										<span class="badge badge-success px-3 rounded-pill">Published</span>
 									<?php elseif ($row['status'] == 2) : ?>
-										<span class="badge badge-danger px-3 rounded-pill">Inactive</span>
+										<span class="badge badge-danger px-3 rounded-pill">Rejected</span>
 									<?php else : ?>
 										<span class="badge badge-primary px-3 rounded-pill">Pending</span>
 									<?php endif; ?>
@@ -72,10 +72,6 @@
 									</button>
 									<div class="dropdown-menu" role="menu">
 										<a class="dropdown-item view-data" href="<?= base_url . "admin/?page=musics/view_music&id={$row['id']}" ?>"><span class="fa fa-eye text-light"></span> View</a>
-										<div class="dropdown-divider"></div>
-										<a class="dropdown-item edit-data" href="<?= base_url . "admin/?page=musics/manage_music&id={$row['id']}" ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
-										<div class="dropdown-divider"></div>
-										<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
 									</div>
 								</td>
 							</tr>

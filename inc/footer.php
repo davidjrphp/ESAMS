@@ -59,9 +59,15 @@
   })
 </script>
 <style>
+  .footer {
+    background: #152F4F;
+  }
+
   /* Contact Section Styles */
   #contact {
     position: relative;
+    top: -150px;
+    right: -530px;
     padding: 50px 0;
     color: #fff;
     text-align: center;
@@ -145,7 +151,7 @@
   }
 </style>
 <!-- Footer-->
-<footer class="py-5 bg-dark">
+<footer class="py-5 footer">
   <div class="container">
     <h1>
       <img src="<?php echo validate_image($_settings->info('logo')) ?>" width="60" height="60" class="d-inline-block align-top rounded-circle" alt="" loading="lazy">

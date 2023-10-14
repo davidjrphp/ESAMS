@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 02, 2023 at 05:27 PM
+-- Generation Time: Oct 14, 2023 at 09:54 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.29
 
@@ -29,8 +29,6 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `artist_list` (
   `id` int(30) NOT NULL,
-  `firstname` varchar(100) NOT NULL,
-  `lastname` varchar(100) NOT NULL,
   `stage_name` varchar(200) NOT NULL,
   `email` varchar(200) NOT NULL,
   `password` text NOT NULL,
@@ -46,8 +44,9 @@ CREATE TABLE `artist_list` (
 -- Dumping data for table `artist_list`
 --
 
-INSERT INTO `artist_list` (`id`, `firstname`, `lastname`, `stage_name`, `email`, `password`, `sex`, `DOB`, `about_artist`, `type`, `avatar`, `date_created`) VALUES
-(5, 'David', 'Mwelwa', 'The Priest', 'davidgarciajr955@gmail.com', '55fc5b709962876903785fd64a6961e5', '', '1996-08-05', '', 1, NULL, '2023-08-28 17:28:07');
+INSERT INTO `artist_list` (`id`, `stage_name`, `email`, `password`, `sex`, `DOB`, `about_artist`, `type`, `avatar`, `date_created`) VALUES
+(5, 'The Priest', 'davidgarciajr955@gmail.com', '55fc5b709962876903785fd64a6961e5', '', '1996-08-05', '', 1, 'uploads/avatars/5.png?v=1696938323', '2023-08-28 17:28:07'),
+(6, 'Jivan Zambia', 'patrickkoman@gmail.com', '7cc2ae164fbe5a3b4fb70c2ecf667fe2', 'MALE', '1992-11-09', 'Hip Rapper from Zambia', 1, NULL, '2023-10-03 13:20:32');
 
 -- --------------------------------------------------------
 
@@ -87,11 +86,12 @@ CREATE TABLE `music_list` (
   `id` bigint(30) NOT NULL,
   `title` text NOT NULL,
   `artist` text NOT NULL,
+  `artist_id` int(50) NOT NULL,
   `category_id` bigint(20) DEFAULT NULL,
   `description` text NOT NULL,
   `banner_path` text NOT NULL,
   `audio_path` text NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1 COMMENT '0=Pending, 1=Active, 2=Inactive',
+  `status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0=Pending, 1=Active, 2=Inactive',
   `streams` int(50) NOT NULL,
   `delete_flag` tinyint(1) NOT NULL DEFAULT 0,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
@@ -102,11 +102,13 @@ CREATE TABLE `music_list` (
 -- Dumping data for table `music_list`
 --
 
-INSERT INTO `music_list` (`id`, `title`, `artist`, `category_id`, `description`, `banner_path`, `audio_path`, `status`, `streams`, `delete_flag`, `created_at`, `updated_at`) VALUES
-(4, 'My Way', 'Emmy The Priest feat. Tama', 6, 'Inspirational Rap music written by Emmy The Priest and Produced by a gifted beats smith Skills of the PhatJam Records. The track was released on 16 October 2021', 'uploads/music_banners/banner4_1.jpeg', 'uploads/audio/The Priest - My Way-1_1.mp3', 1, 0, 0, '2023-05-07 03:02:55', '2023-05-07 03:02:56'),
-(5, 'Zigolo', 'Jivan &amp; Zack 1\'3', 6, 'Hip-Hop banger by Jivan and Zack 1\'3 called Zogolo wonderfully produced by Skills of the PhatJam Records', 'uploads/music_banners/banner5_2.jpg', 'uploads/audio/Jivan & Zaq-Zigolo-Prod.-By-Skillz_1.mp3', 1, 0, 0, '2023-05-07 03:28:55', '2023-05-07 03:28:57'),
-(6, 'Rap Revolution', 'The Priest, Jivan &amp; Laguna BK', 6, 'A Hip-Hop Track done by The Echo Sound Arts Crew in the quest to devise the Rap game and was written by Emmy The Priest. The banger was produced by Vent and Nino', 'uploads/music_banners/banner4_1_1.jpg', 'uploads/audio/Rap Revolution_1.mp3', 1, 0, 0, '2023-05-07 03:33:04', '2023-05-07 03:33:05'),
-(7, 'Black Oceans', 'Emmy The Priest', 6, 'A track Done by The Priest to reveal the untold mysteries of the Rap Game. Written and produced by The Priest', 'uploads/music_banners/banner5_1_1.jpg', 'uploads/audio/BLACK OCEANS_1.mp3', 1, 0, 0, '2023-05-07 03:36:37', '2023-05-07 03:36:38');
+INSERT INTO `music_list` (`id`, `title`, `artist`, `artist_id`, `category_id`, `description`, `banner_path`, `audio_path`, `status`, `streams`, `delete_flag`, `created_at`, `updated_at`) VALUES
+(4, 'My Way', 'Emmy The Priest feat. Tama', 5, 6, 'Inspirational Rap music written by Emmy The Priest and Produced by a gifted beats smith Skills of the PhatJam Records. The track was released on 16 October 2021', 'uploads/music_banners/banner4_1.jpeg', 'uploads/audio/The Priest - My Way-1_1.mp3', 1, 5, 0, '2023-05-07 03:02:55', '2023-10-13 10:04:42'),
+(5, 'Zigolo', 'Jivan &amp; Zack 1\'3', 0, 6, 'Hip-Hop banger by Jivan and Zack 1\'3 called Zogolo wonderfully produced by Skills of the PhatJam Records', 'uploads/music_banners/banner5_2.jpg', 'uploads/audio/Jivan & Zaq-Zigolo-Prod.-By-Skillz_1.mp3', 1, 0, 0, '2023-05-07 03:28:55', '2023-05-07 03:28:57'),
+(6, 'Rap Revolution', 'The Priest, Jivan &amp; Laguna BK', 0, 6, 'A Hip-Hop Track done by The Echo Sound Arts Crew in the quest to devise the Rap game and was written by Emmy The Priest. The banger was produced by Vent and Nino', 'uploads/music_banners/banner4_1_1.jpg', 'uploads/audio/Rap Revolution_1.mp3', 1, 0, 0, '2023-05-07 03:33:04', '2023-05-07 03:33:05'),
+(7, 'Black Oceans', 'Emmy The Priest', 0, 6, 'A track Done by The Priest to reveal the untold mysteries of the Rap Game. Written and produced by The Priest', 'uploads/music_banners/banner5_1_1.jpg', 'uploads/audio/BLACK OCEANS_1.mp3', 1, 0, 0, '2023-05-07 03:36:37', '2023-05-07 03:36:38'),
+(8, 'Docking Corona', 'Emmy The Priest', 0, 6, 'COVID Track', 'uploads/music_banners/CVPic1.jpg', 'uploads/audio/Docking-Corona-Emmy-The-Priest-Norbit-High-Laguna-BK-JIVAN-Prod-By-Vent_1.mp3', 1, 1, 0, '2023-10-03 15:34:08', '2023-10-13 10:04:14'),
+(9, 'Home', 'Tedashi feat. David Crowder', 5, 6, 'Looking for the shade where the trees are dead', 'uploads/music_banners/PeaceToMe.jpg', 'uploads/audio/Tedashii - Home feat. David Crowder - Copy.mp3', 1, 7, 0, '2023-10-12 13:23:44', '2023-10-13 07:43:19');
 
 -- --------------------------------------------------------
 
@@ -218,7 +220,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `artist_list`
 --
 ALTER TABLE `artist_list`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `category_list`
@@ -230,7 +232,7 @@ ALTER TABLE `category_list`
 -- AUTO_INCREMENT for table `music_list`
 --
 ALTER TABLE `music_list`
-  MODIFY `id` bigint(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `system_info`

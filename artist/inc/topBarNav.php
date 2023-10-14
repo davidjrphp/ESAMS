@@ -25,15 +25,31 @@
     </a>
 
     <div class="collapse navbar-collapse " id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4 ">
-        <li class="nav-item rounded-0 title-font text-center w-100" style="font-size: 20px"><a class="nav-link text-white" aria-current="page" href="./"><b>Home</b></a></li>
-        <li class="nav-item rounded-0 title-font text-center w-100" style="font-size: 20px"><a class="nav-link text-white" href="./?page=music_list"><b>Trending</b></a></li>
-        <li class="nav-item rounded-0 title-font text-center w-100" style="font-size: 20px"><a class="nav-link text-white" href="./?page=music_list"><b>Popular</b></a></li>
-        <li class="nav-item rounded-0 title-font text-center w-100" style="font-size: 20px"><a class="nav-link text-white" href="./?page=categories"><b>Genre</b></a></li>
-        <li class="nav-item rounded-0 title-font text-center w-100" style="font-size: 20px"><a class="nav-link text-white" href=""><b>Playlist</b></a></li>
-        <!-- <li class="nav-item rounded-0 title-font text-center w-100" style="font-size: 20px"><a class="nav-link text-white" href="">Supporters</a></li>
-        <li class="nav-item rounded-0 title-font text-center w-100" style="font-size: 20px"><a class="nav-link text-white" href="./?page=about">About</a></li> -->
-
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+        <li class="nav-item rounded-0 title-font text-center w-100" style="font-size: 20px">
+          <a class="nav-link text-white" aria-current="page" href="./"><b>Home</b></a>
+        </li>
+        <li class="nav-item rounded-0 title-font text-center w-100" style="font-size: 20px">
+          <a class="nav-link text-white" href="./?page=all_artists"><b>Artists</b></a>
+        </li>
+        <li class="nav-item rounded-0 title-font text-center w-100" style="font-size: 20px">
+          <a class="nav-link text-white" href="./?page=music_list"><b>Popular</b></a>
+        </li>
+        <li class="nav-item rounded-0 title-font text-center w-100" style="font-size: 20px">
+          <a class="nav-link text-white" href="./?page=categories"><b>Genre</b></a>
+        </li>
+        <li class="nav-item dropdown rounded-0 title-font text-center w-100" style="font-size: 20px">
+          <a class="nav-link dropdown-toggle text-white" href="#" id="moreDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <b>More</b>
+          </a>
+          <div class="dropdown-menu" aria-labelledby="moreDropdown">
+            <a class="dropdown-item" href="#" style="font-size: 20px">Playlist</a>
+            <a class="dropdown-item" href="#" style="font-size: 20px">Favorite</a>
+            <a class="dropdown-item" href="#" style="font-size: 20px">Podcast</a>
+            <a class="dropdown-item" href="#" style="font-size: 20px">Supporters</a>
+            <a class="dropdown-item" href="./?page=about" style="font-size: 20px">About</a>
+          </div>
+        </li>
       </ul>
 
       <!-- Right navbar links -->

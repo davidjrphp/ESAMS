@@ -13,7 +13,7 @@ foreach ($user->fetch_array() as $k => $v) {
 	<div class="card-body">
 		<div class="container-fluid">
 			<div id="msg"></div>
-			<form action="" id="manage-user">
+			<form action="" id="manage-artist">
 				<input type="hidden" name="id" value="<?php echo $_settings->userdata('id') ?>">
 				<div class="form-group">
 					<label for="name">Display Name</label>
@@ -44,7 +44,7 @@ foreach ($user->fetch_array() as $k => $v) {
 	<div class="card-footer">
 		<div class="col-md-12">
 			<div class="row">
-				<button class="btn btn-sm btn-primary" form="manage-user">Update</button>
+				<button class="btn btn-sm btn-primary" form="manage-artist">Update</button>
 			</div>
 		</div>
 	</div>
@@ -74,7 +74,7 @@ foreach ($user->fetch_array() as $k => $v) {
 		e.preventDefault();
 		start_loader()
 		$.ajax({
-			url: _base_url_ + 'classes/Artist.php?f=save',
+			url: _base_url_ + 'classes/Artists.php?f=save',
 			data: new FormData($(this)[0]),
 			cache: false,
 			contentType: false,
