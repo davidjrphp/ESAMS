@@ -12,7 +12,7 @@
 <aside class="main-sidebar sidebar-dark-purple navbar-dark elevation-4 sidebar-no-expand">
   <!-- Brand Logo -->
   <a href="<?php echo base_url ?>arist" class="brand-link bg-purple text-sm">
-    <img src="<?php echo validate_image($_settings->info('logo')) ?>" alt="Store Logo" class="brand-image img-circle elevation-3" style="opacity: .8;width: 1.5rem;height: 1.5rem;max-height: unset">
+    <img src="<?php echo validate_image($_settings->info('logo')) ?>" alt="Store Logo" class="brand-image img-circle elevation-3" style="opacity: .8;width: 1.8rem;height: 1.8rem;max-height: unset">
     <span class="brand-text font-weight-light"><?php echo $_settings->info('short_name') ?></span>
   </a>
   <!-- Sidebar -->

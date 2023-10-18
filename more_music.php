@@ -147,11 +147,11 @@ if (isset($_GET['cid'])) {
 </style>
 <div class="row">
     <div class="col-lg-12 col-md-12 col-md-12 col-xs-12 mx-auto my-5 py5">
-        <h4 class="heading title-font" style="font-size: 30px">Popular</h4>
         <div class="card shadow rounded-0">
             <div class="card-body rounded-0">
                 <div class="container-fluid"></div>
-                <div class="row">
+                <h4 class="heading title-font" style="font-size: 30px">Popular</h4><br><br>
+                <!-- <div class="row">
                     <div class="col-lg-6 col-md-8 col-sm-12 col-xs-12 mx-auto mt-5 mb-3 ">
                         <h1 class="text-center font-weight-bolder title-font"><?= $page_title ?></h1>
                         <hr class="mx-auto bg-primary opacity-100" style="height:2px;opacity:1;width:20%">
@@ -176,7 +176,7 @@ if (isset($_GET['cid'])) {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
 
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mx-auto mb-5">

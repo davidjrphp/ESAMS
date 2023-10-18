@@ -18,11 +18,7 @@
 </style>
 <nav class="main-header navbar navbar-expand-lg navbar-dark bg-gradient-info">
   <div class="container container-md-fluid container-sm-fluid px-6 px-lg-7 ">
-    <button class="navbar-toggler btn btn-sm" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-    <a class="navbar-brand" href="./">
-      <img src="<?php echo validate_image($_settings->info('logo')) ?>" width="50" height="50" class="d-inline-block align-top rounded-circle" alt="" loading="lazy">
-      <?php echo $_settings->info('short_name') ?>
-    </a>
+
 
     <div class="collapse navbar-collapse " id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">

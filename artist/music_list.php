@@ -207,7 +207,7 @@ if (isset($_GET['cid'])) {
         $('.view_music_details').click(function(e) {
             e.preventDefault()
             var id = $(this).attr('data-id')
-            uni_modal("Music Details", "<?= base_url . "view_music_details.php?id=" ?>" + id, "modal-large")
+            uni_modal("Music Details", "<?= "view_music_details.php?id=" ?>" + id, "modal-large")
         })
 
         $('.play_music').click(function(e) {
