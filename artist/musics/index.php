@@ -43,7 +43,7 @@
 					<tbody>
 						<?php
 						$i = 1;
-						$qry = $conn->query("SELECT *, COALESCE((SELECT `name` FROM `category_list` where `music_list`.`category_id` = `category_list`.`id`), 'Unkown Category') as `category_name` FROM `music_list` where `delete_flag` = 0 order by `title` asc");
+						$qry = $conn->query("SELECT *, COALESCE((SELECT `name` FROM `category_list` where `music_list`.`category_id` = `category_list`.`id`), 'Unkown Category') as `category_name` FROM `music_list` where `delete_flag` = 0 and `artist_id` = '{$_SESSION['userdata']['id']}' order by `title` asc");
 						while ($row = $qry->fetch_assoc()) :
 						?>
 							<tr>
