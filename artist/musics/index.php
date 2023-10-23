@@ -71,7 +71,7 @@
 										<span class="sr-only">Toggle Dropdown</span>
 									</button>
 									<div class="dropdown-menu" role="menu">
-										<a class="dropdown-item view-data" href="<?= base_url . "admin/?page=musics/view_music&id={$row['id']}" ?>"><span class="fa fa-eye text-light"></span> View</a>
+										<a class="dropdown-item view-data" href="<?= "./?page=musics/view_music&id={$row['id']}" ?>"><span class="fa fa-eye text-light"></span> View</a>
 									</div>
 								</td>
 							</tr>

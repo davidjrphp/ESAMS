@@ -1,5 +1,6 @@
 <?php
-if (isset($_GET['id']) && $_GET['id'] > 0) {
+if (isset($_GET['id'])) {
+	$id = $_GET['id'];
 	$qry = $conn->query("SELECT * from `music_list` where id = '{$_GET['id']}' and delete_flag = 0 ");
 	if ($qry->num_rows > 0) {
 		foreach ($qry->fetch_assoc() as $k => $v) {

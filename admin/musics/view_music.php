@@ -1,34 +1,36 @@
-<?php 
-if(isset($_GET['id']) && $_GET['id'] > 0){
-    $qry = $conn->query("SELECT * from `music_list` where id = '{$_GET['id']}' and delete_flag = 0 ");
-    if($qry->num_rows > 0){
-        foreach($qry->fetch_assoc() as $k => $v){
-            $$k=$v;
-        }
-    }else{
+<?php
+if (isset($_GET['id'])) {
+	$id = $_GET['id'];
+	$qry = $conn->query("SELECT * from `music_list` where id = '{$_GET['id']}' and delete_flag = 0 ");
+	if ($qry->num_rows > 0) {
+		foreach ($qry->fetch_assoc() as $k => $v) {
+			$$k = $v;
+		}
+	} else {
 		echo '<script>alert("Music ID is not valid."); location.replace("./?page=musics")</script>';
 	}
-}else{
+} else {
 	echo '<script>alert("Music ID is Required."); location.replace("./?page=musics")</script>';
 }
 ?>
-<?php if($_settings->chk_flashdata('success')): ?>
-<script>
-	alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
-</script>
-<?php endif;?>
+<?php if ($_settings->chk_flashdata('success')) : ?>
+	<script>
+		alert_toast("<?php echo $_settings->flashdata('success') ?>", 'success')
+	</script>
+<?php endif; ?>
 <style>
-	.music-img{
-		width:3em;
-		height:3em;
-		object-fit:cover;
-		object-position:center center;
+	.music-img {
+		width: 3em;
+		height: 3em;
+		object-fit: cover;
+		object-position: center center;
 	}
-	img#BannerViewer{
+
+	img#BannerViewer {
 		height: 30vh;
 		width: 100%;
 		object-fit: scale-down;
-		object-position:center center;
+		object-position: center center;
 		/* border-radius: 100% 100%; */
 	}
 </style>
@@ -36,13 +38,13 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 	<div class="card-header">
 		<h3 class="card-title">Music Details</h3>
 		<div class="card-tools">
-			<a href="<?= base_url."admin/?page=musics/manage_music&id={$id}"?>" class="btn btn-flat btn-primary bg-primary"><span class="fas fa-edit"></span>  Edit</a>
-			<button id="delete_data" type="button" class="btn btn-flat btn-danger bg-danger"><span class="fas fa-trash"></span>  Edit</button>
-			<a href="<?= base_url."admin/?page=musics"?>" class="btn btn-flat btn-light bg-light"><span class="fas fa-angle-left"></span>  Back to List</a>
+			<a href="<?= base_url . "admin/?page=musics/manage_music&id={$id}" ?>" class="btn btn-flat btn-primary bg-primary"><span class="fas fa-edit"></span> Edit</a>
+			<button id="delete_data" type="button" class="btn btn-flat btn-danger bg-danger"><span class="fas fa-trash"></span> Edit</button>
+			<a href="<?= base_url . "admin/?page=musics" ?>" class="btn btn-flat btn-light bg-light"><span class="fas fa-angle-left"></span> Back to List</a>
 		</div>
 	</div>
 	<div class="card-body">
-        <div class="container-fluid">
+		<div class="container-fluid">
 			<div class="form-group">
 				<label for="title" class="control-label">Title:</label>
 				<div class="pl-4"><?= isset($title) ? $title : "" ?></div>
@@ -67,15 +69,15 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 			</div>
 			<div class="form-group">
 				<label for="" class="control-label">Audio File</label>
-				<?php if(isset($audio_path) && !empty($audio_path)): ?>
+				<?php if (isset($audio_path) && !empty($audio_path)) : ?>
 					<div class="pl-4">
-						<audio src="<?= base_url.$audio_path ?>" controls></audio>
+						<audio src="<?= base_url . $audio_path ?>" controls></audio>
 					</div>
 					<div class="pl-4">
-						<a href="<?= base_url.$audio_path ?>" target="_blank"><?= (pathinfo($audio_path, PATHINFO_FILENAME)).".".(pathinfo($audio_path, PATHINFO_EXTENSION))  ?></a>
+						<a href="<?= base_url . $audio_path ?>" target="_blank"><?= (pathinfo($audio_path, PATHINFO_FILENAME)) . "." . (pathinfo($audio_path, PATHINFO_EXTENSION))  ?></a>
 
 					</div>
-				<?php else: ?>
+				<?php else : ?>
 					<div class="pl-4"><span class="text-muted">No Audio File Added.</span></div>
 				<?php endif; ?>
 			</div>
@@ -85,101 +87,104 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 			</div>
 		</div>
 	</div>
-	
+
 </div>
 <script>
-	function displayBanner(input,_this) {
-	    if (input.files && input.files[0]) {
-	        var reader = new FileReader();
-	        reader.onload = function (e) {
-	        	_this.siblings('.custom-file-label').html(input.files[0].name)
-	        	$('#BannerViewer').attr('src', e.target.result);
-	        }
-
-	        reader.readAsDataURL(input.files[0]);
-	    }else{
-			_this.siblings('.custom-file-label').html("Choose File")
-
-		}
-	}
-	function displayAudioName(input,_this){
+	function displayBanner(input, _this) {
 		if (input.files && input.files[0]) {
-	        var reader = new FileReader();
-	        reader.onload = function (e) {
-	        	_this.siblings('.custom-file-label').html(input.files[0].name)
-	        }
+			var reader = new FileReader();
+			reader.onload = function(e) {
+				_this.siblings('.custom-file-label').html(input.files[0].name)
+				$('#BannerViewer').attr('src', e.target.result);
+			}
 
-	        reader.readAsDataURL(input.files[0]);
-	    }else{
+			reader.readAsDataURL(input.files[0]);
+		} else {
+			_this.siblings('.custom-file-label').html("Choose File")
+
+		}
+	}
+
+	function displayAudioName(input, _this) {
+		if (input.files && input.files[0]) {
+			var reader = new FileReader();
+			reader.onload = function(e) {
+				_this.siblings('.custom-file-label').html(input.files[0].name)
+			}
+
+			reader.readAsDataURL(input.files[0]);
+		} else {
 			_this.siblings('.custom-file-label').html("Choose File")
 		}
 	}
-	$(document).ready(function(){
-		$('#delete_data').click(function(){
-			_conf("Are you sure to delete this Music permanently?","delete_music",["<?= isset($id) ? $id : "" ?>"])
+	$(document).ready(function() {
+		$('#delete_data').click(function() {
+			_conf("Are you sure to delete this Music permanently?", "delete_music", ["<?= isset($id) ? $id : "" ?>"])
 		})
 		$('#category_id').select2({
-			placeholder:"Please Select Category Here",
-			containerCssClass:"rounded-0"
+			placeholder: "Please Select Category Here",
+			containerCssClass: "rounded-0"
 		})
-		$('#music-form').submit(function(e){
+		$('#music-form').submit(function(e) {
 			e.preventDefault();
-            var _this = $(this)
-			 $('.err-msg').remove();
+			var _this = $(this)
+			$('.err-msg').remove();
 			start_loader();
 			$.ajax({
-				url:_base_url_+"classes/Master.php?f=save_music",
+				url: _base_url_ + "classes/Master.php?f=save_music",
 				data: new FormData($(this)[0]),
-                cache: false,
-                contentType: false,
-                processData: false,
-                method: 'POST',
-                type: 'POST',
-                dataType: 'json',
-				error:err=>{
+				cache: false,
+				contentType: false,
+				processData: false,
+				method: 'POST',
+				type: 'POST',
+				dataType: 'json',
+				error: err => {
 					console.log(err)
-					alert_toast("An error occured",'error');
+					alert_toast("An error occured", 'error');
 					end_loader();
 				},
-				success:function(resp){
-					if(typeof resp =='object' && resp.status == 'success'){
+				success: function(resp) {
+					if (typeof resp == 'object' && resp.status == 'success') {
 						// location.reload()
-						location.replace("<?= base_url ?>admin/?page=musics/view_music&id="+resp.mid)
-					}else if(resp.status == 'failed' && !!resp.msg){
-                        var el = $('<div>')
-                            el.addClass("alert alert-danger err-msg").text(resp.msg)
-                            _this.prepend(el)
-                            el.show('slow')
-                            $("html, body").scrollTop(0);
-                            end_loader()
-                    }else{
-						alert_toast("An error occured",'error');
+						location.replace("<?= base_url ?>admin/?page=musics/view_music&id=" + resp.mid)
+					} else if (resp.status == 'failed' && !!resp.msg) {
+						var el = $('<div>')
+						el.addClass("alert alert-danger err-msg").text(resp.msg)
+						_this.prepend(el)
+						el.show('slow')
+						$("html, body").scrollTop(0);
+						end_loader()
+					} else {
+						alert_toast("An error occured", 'error');
 						end_loader();
-                        console.log(resp)
+						console.log(resp)
 					}
 				}
 			})
 		})
 
 	})
-	
-	function delete_music($id){
+
+	function delete_music($id) {
 		start_loader();
 		$.ajax({
-			url:_base_url_+"classes/Master.php?f=delete_music",
-			method:"POST",
-			data:{id: $id},
-			dataType:"json",
-			error:err=>{
+			url: _base_url_ + "classes/Master.php?f=delete_music",
+			method: "POST",
+			data: {
+				id: $id
+			},
+			dataType: "json",
+			error: err => {
 				console.log(err)
-				alert_toast("An error occured.",'error');
+				alert_toast("An error occured.", 'error');
 				end_loader();
 			},
-			success:function(resp){
-				if(typeof resp== 'object' && resp.status == 'success'){
-					location.replace("<?= base_url."admin/?page=musics" ?>");
-				}else{
-					alert_toast("An error occured.",'error');
+			success: function(resp) {
+				if (typeof resp == 'object' && resp.status == 'success') {
+					location.replace("<?= base_url . "admin/?page=musics" ?>");
+				} else {
+					alert_toast("An error occured.", 'error');
 					end_loader();
 				}
 			}
