@@ -154,6 +154,67 @@
   .shortName {
     margin-left: 5rem;
   }
+
+
+  .more-links {
+    position: relative;
+    top: -250px;
+    right: 0;
+    justify-content: center;
+    padding: 50px 0;
+    color: #fff;
+    text-align: center;
+  }
+
+  /* Center-align the header text */
+  .header-text {
+    text-align: center;
+  }
+
+  /* Center-align the links in the flex-column */
+  .nav.flex-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  /* Style for active and regular links */
+  .nav-link {
+    text-align: center;
+  }
+
+  li a {
+    display: block;
+    color: #000;
+    padding: 8px 16px;
+    text-decoration: none;
+  }
+
+
+  #policy .policy {
+    display: inline-block;
+    line-height: 30px;
+  }
+
+  #policy .policy ul {
+    list-style: none;
+    display: flex;
+    text-decoration: none;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: -200px;
+  }
+
+  #policy .policy li {
+    margin: 0 15px;
+  }
+
+  #policy .policy li a {
+    color: #fff;
+    font-size: 10px;
+    transition: color 0.3s ease;
+  }
 </style>
 <!-- Footer-->
 <footer class="py-5 footer">
@@ -171,12 +232,32 @@
           <li><a href="#"><span><i class="fab fa-instagram"></i></span></a></li>
           <li><a href=""><span><i class="fab fa-youtube"></i></span></a></li>
           <li><a href="#"><span><i class="fab fa-twitter"></i></span></a></li>
-          <li><a href="mailto:davidgarciajr955@gmail.com"><span><i class="fas fa-envelope"></i></span></a></li>
+          <!-- <li><a href="mailto:davidgarciajr955@gmail.com"><span><i class="fas fa-envelope"></i></span></a></li> -->
         </ul>
       </div>
     </div>
-    <strong class="float-center justify-center" style="margin-left: 5rem">&copy; <?php echo date('Y') ?>. <?php echo $_settings->info('short_name') ?></strong>
-    <div class="float-right d-none d-sm-inline-block">Developed By: <a href="mailto:davidgaricajr955@gmail.com">David Mwelwa</a></div>
+    <div class="more-links">
+      <h5 class="header-text align-center title-font text-gray" style="font-size: 30px">Browse</h5>
+      <nav class="nav flex-column">
+        <a class="nav-link text-white" style="font-size: 20px" href="#">For Artist</a>
+        <a class="nav-link text-white" style="font-size: 20px" href="#">Developers</a>
+        <a class="nav-link text-white" style="font-size: 20px" href="#">About</a>
+        <a class="nav-link text-white" style="font-size: 20px" href="#">Web Player</a>
+        <a class="nav-link text-white" style="font-size: 20px" href="#">Supporters</a>
+      </nav>
+    </div>
+
+    <div class="m-0 item-center" id="policy">
+      <div class="policy d-flex flex-column">
+        <ul>
+          <li><a href="#" style="font-size: 14px"><span><i class="nav-link"></i></span>Legal</a></li>
+          <li><a href="#" style="font-size: 14px"><span><i class="nav-link"></i></span>Terms & Services</a></li>
+          <li><a href="#" style="font-size: 14px"><span><i class="nav-link"></i></span>Privacy Policy</a></li>
+          <strong style="padding-left: 750px">&copy; <?php echo date('Y') ?>. <?php echo $_settings->info('short_name') ?></strong>
+          <!-- <div class="float-right d-none d-sm-inline-block" style="padding-left: 500px">Developed By: <a href="mailto:davidgaricajr955@gmail.com">David Mwelwa</a></div> -->
+        </ul>
+      </div>
+    </div>
   </div>
 </footer>
 

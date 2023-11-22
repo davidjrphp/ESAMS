@@ -5,7 +5,7 @@
 
   p {
     font-weight: bold;
-    font-size: 25px;
+    font-size: 22px;
   }
 </style>
 <!-- Main Sidebar Container -->
@@ -13,7 +13,7 @@
   <!-- Brand Logo -->
   <a href="<?php echo base_url ?>arist" class="brand-link bg-purple text-sm">
     <img src="<?php echo validate_image($_settings->info('logo')) ?>" alt="Store Logo" class="brand-image img-circle elevation-3" style="opacity: .8;width: 1.8rem;height: 1.8rem;max-height: unset">
-    <span class="brand-text font-weight-light"><?php echo $_settings->info('short_name') ?></span>
+    <span class="brand-text font-weight-bold text-decoration-none"><?php echo $_settings->info('short_name') ?> For Artists</span>
   </a>
   <!-- Sidebar -->
   <div class="sidebar os-host os-theme-light os-host-overflow os-host-overflow-y os-host-resize-disabled os-host-transition os-host-scrollbar-horizontal-hidden">
@@ -53,12 +53,12 @@
                   <i class="nav-icon fas fa-music"></i>
                   <p>
                     Music Upload
-                    <i class="right fas fa-angle-left"></i>
+                    <!-- <i class="right fas fa-angle-left"></i> -->
                   </p>
                 </a>
                 <ul class="nav nav-treeview" style="display: none;">
                   <li class="nav-item">
-                    <a href="./?page=musics/manage_music" class="nav-link tree-item nav-musics-manage_music">
+                    <a href="./?page=musics/subscription" class="nav-link tree-item nav-musics-subscription">
                       <i class="fa fa-plus nav-icon"></i>
                       <p>Upload New</p>
                     </a>

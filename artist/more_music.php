@@ -13,6 +13,14 @@ if (isset($_GET['cid'])) {
 ?>
 
 <style>
+    .music-card {
+        position: relative;
+        background-position: center;
+        height: auto;
+        display: flex;
+        border-radius: 15px;
+    }
+
     .music-item {
         display: flex;
         align-items: center;
@@ -144,8 +152,9 @@ if (isset($_GET['cid'])) {
     .music-btns i {
         font-size: .7em;
     }
+    
 </style>
-<div class="row">
+<div class="row music-card">
     <div class="col-lg-12 col-md-12 col-md-12 col-xs-12 mx-auto my-5 py5">
         <div class="card shadow rounded-0">
             <div class="card-body rounded-0">
@@ -161,7 +170,7 @@ if (isset($_GET['cid'])) {
                         $music_list = $conn->query("SELECT *, COALESCE((SELECT `name` FROM `category_list` where `music_list`.`category_id` = `category_list`.`id`), 'Unkown Category') as `category_name` FROM `music_list` where `status` = 1 and `delete_flag` = 0 and `audio_path` != ''  {$where} and `artist_id` = '{$_SESSION['userdata']['id']}' order by `streams` desc");
                         while ($row = $music_list->fetch_assoc()) :
                         ?>
-                            <div class="music-item">
+                            <div class="music-item hover">
                                 <div class="music-banner">
                                     <img src="<?= validate_image($row['banner_path']) ?>" alt="<?= $row['title'] ?>">
                                 </div>
