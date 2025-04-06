@@ -73,9 +73,7 @@
 <div class="card card-outline rounded-0 card-purple">
     <div class="card-header">
         <h2 class="card-title">Choose your Plan</h2>
-        <div class="card-tools">
-            <!-- <a href="<?= base_url . "artist/?page=musics" ?>" class="btn btn-flat btn-light bg-light"><span class="fas fa-angle-left"></span> Back to List</a> -->
-        </div>
+        
     </div>
     <div class="card-body">
         <div class="container-fluid">

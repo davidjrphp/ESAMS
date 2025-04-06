@@ -24,7 +24,6 @@
 
     .card-title-font {
         font-size: 1.5rem;
-        /* Adjust the font size for the card title */
     }
 
     .card-body {
@@ -72,7 +71,7 @@
                             </div>
                         </div>
                         <div class="card-footer text-right">
-                            <a href="<?= base_url . "?page=music_list&cid={$row['id']}" ?>" class="btn btn-sm btn-flat btn-primary bg-gradient-primary">View Music</a>
+                            <a href="?page=music_list&cid={$row['id']}" class="btn btn-sm btn-flat btn-primary bg-gradient-primary">View Music</a>
                         </div>
                     </div>
                 </div>

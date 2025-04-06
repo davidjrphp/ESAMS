@@ -65,10 +65,10 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
     <div class="form-group row">
         <?php if (isset($audio_path) && !empty($audio_path)) : ?>
             <div class="col-md-9">
-                <audio src="<?= base_url . $audio_path ?>" controls></audio>
+                <audio src="<?= $audio_path ?>" controls></audio>
             </div>
             <div class="col-md-9">
-                <a href="<?= base_url . $audio_path ?>" target="_blank"><?= (pathinfo($audio_path, PATHINFO_FILENAME)) . "." . (pathinfo($audio_path, PATHINFO_EXTENSION))  ?></a>
+                <a href="<?= $audio_path ?>" target="_blank"><?= (pathinfo($audio_path, PATHINFO_FILENAME)) . "." . (pathinfo($audio_path, PATHINFO_EXTENSION))  ?></a>
             </div>
         <?php else : ?>
             <div class="col-md-9"><span class="text-muted">No Audio File Added.</span></div>

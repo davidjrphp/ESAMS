@@ -1,4 +1,5 @@
 <?php
+ini_set('display_errors', 1);
 require_once('../config.php');
 class Master extends DBConnection
 {
@@ -130,9 +131,9 @@ class Master extends DBConnection
 				if (!in_array($_FILES['banner_img']['type'], $accept)) {
 					$resp['msg'] .= "But failed to upload Banner image due to invalid file type.";
 				} else {
-					if (!is_dir(base_app . "uploads/music_banners/"))
-						mkdir(base_app . "uploads/music_banners/");
-					$fname = "uploads/music_banners/" . $fname;
+					if (!is_dir(base_app . "../uploads/music_banners/"))
+						mkdir(base_app . "../uploads/music_banners/");
+					$fname = "../uploads/music_banners/" . $fname;
 					$i = 0;
 					while (true) {
 						$tmp_fname = $fname . ($i > 0 ? "_{$i}" : "") . "." . $ext;
@@ -186,7 +187,7 @@ class Master extends DBConnection
 					$temp = imagescale($uploadfile, $new_width, $new_height);
 					if (is_file(base_app . $fname))
 						unlink(base_app . $fname);
-					$upload = imagepng($temp, base_app . $fname);
+					$upload = imagepng($temp, $fname);
 					if ($upload) {
 						$this->conn->query("UPDATE `music_list` set `banner_path` = '{$fname}' where `id` = $mid ");
 					} else {
@@ -200,9 +201,9 @@ class Master extends DBConnection
 				$file_parts = pathinfo($_FILES['audio_file']['name']);
 				$ext = $file_parts['extension'];
 				$fname = $file_parts['filename'];
-				if (!is_dir(base_app . "uploads/audio/"))
-					mkdir(base_app . "uploads/audio/");
-				$fname = "uploads/audio/" . $fname;
+				if (!is_dir(base_app . "../uploads/audio/"))
+					mkdir(base_app . "../uploads/audio/");
+				$fname = "../uploads/audio/" . $fname;
 				if (!stristr(mime_content_type($_FILES['audio_file']['tmp_name']), 'audio')) {
 					$resp['msg'] .= "But failed to upload audio file due to invalid file type.";
 				} else {
@@ -269,9 +270,9 @@ class Master extends DBConnection
 				if (!in_array($_FILES['banner_img']['type'], $accept)) {
 					$resp['msg'] .= "But failed to upload Banner image due to invalid file type.";
 				} else {
-					if (!is_dir(base_app . "uploads/music_banners/"))
-						mkdir(base_app . "uploads/music_banners/");
-					$fname = "uploads/music_banners/" . $fname;
+					if (!is_dir("../uploads/music_banners/"))
+						mkdir("../uploads/music_banners/");
+					$fname = "../uploads/music_banners/" . $fname;
 					$i = 0;
 					while (true) {
 						$tmp_fname = $fname . ($i > 0 ? "_{$i}" : "") . "." . $ext;
@@ -339,9 +340,9 @@ class Master extends DBConnection
 				$file_parts = pathinfo($_FILES['audio_file']['name']);
 				$ext = $file_parts['extension'];
 				$fname = $file_parts['filename'];
-				if (!is_dir(base_app . "uploads/audio/"))
-					mkdir(base_app . "uploads/audio/");
-				$fname = "uploads/audio/" . $fname;
+				if (!is_dir("../uploads/audio/"))
+					mkdir("../uploads/audio/");
+				$fname = "../uploads/audio/" . $fname;
 				if (!stristr(mime_content_type($_FILES['audio_file']['tmp_name']), 'audio')) {
 					$resp['msg'] .= "But failed to upload audio file due to invalid file type.";
 				} else {
@@ -495,8 +496,8 @@ class Master extends DBConnection
 			$data = [
 				"title" => $result['title'],
 				"artist" => $result['artist'],
-				"discPath" => base_url . $result['audio_path'],
-				"coverPath" => base_url . $result['banner_path']
+				"discPath" => $result['audio_path'],
+				"coverPath" => $result['banner_path']
 			];
 		}
 		if (isset($data))

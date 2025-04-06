@@ -32,7 +32,7 @@ $(document).ready(function() {
             if ($('.err_msg').length > 0)
                 $('.err_msg').remove()
             $.ajax({
-                url: _base_url_ + 'classes/Login2.php?f=login',
+                url:'../classes/Login2.php?f=login',
                 method: 'POST',
                 data: $(this).serialize(),
                 error: err => {
@@ -43,7 +43,7 @@ $(document).ready(function() {
                     if (resp) {
                         resp = JSON.parse(resp)
                         if (resp.status == 'success') {
-                            location.replace(_base_url_ + 'artist');
+                            location.replace('artist');
                         } else if (resp.status == 'incorrect') {
                             var _frm = $('#alogin-frm')
                             var _msg = "<div class='alert alert-danger text-white err_msg'><i class='fa fa-exclamation-triangle'></i> Incorrectemail or password</div>"

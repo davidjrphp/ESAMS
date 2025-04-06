@@ -37,7 +37,7 @@
                         </div>
                     </div>
                     <div class="card-footer text-right">
-                        <a href="<?= base_url."?page=music_list&cid={$row['id']}" ?>" class="btn btn-sm btn-flat btn-primary bg-gradient-primary">View Category</a>
+                        <a href="?page=music_list&cid={$row['id']}" class="btn btn-sm btn-flat btn-primary bg-gradient-primary">View Category</a>
                     </div>
                 </div>
             </div>

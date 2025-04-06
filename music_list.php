@@ -189,7 +189,7 @@ if (isset($_GET['cid'])) {
                             </div>
                             <div class="card-footer text-right">
                                 <div class="row justify-content-end">
-                                    <a href="<?= base_url . $row['audio_path'] ?>" download="<?= $row['title'] . "." . (pathinfo($row['audio_path'], PATHINFO_EXTENSION)) ?>" class="btn btn-sm btn-outline-success rounded-circle p-0 music-btns"><i class="fa fa-download"></i></a>
+                                    <a href="<?= $row['audio_path'] ?>" download="<?= $row['title'] . "." . (pathinfo($row['audio_path'], PATHINFO_EXTENSION)) ?>" class="btn btn-sm btn-outline-success rounded-circle p-0 music-btns"><i class="fa fa-download"></i></a>
                                     <a href="javascript:void(0)" data-id="<?= $row['id'] ?>" class="btn btn-sm btn-outline-primary rounded-circle p-0 music-btns play_music"><i class="fa fa-play"></i></a>
                                     <a href="javascript:void(0)" data-id="<?= $row['id'] ?>" class="btn btn-sm btn-outline-info rounded-circle p-0 music-btns view_music_details"><i class="fa fa-info"></i></a>
                                 </div>
@@ -260,17 +260,17 @@ if (isset($_GET['cid'])) {
             })
         })
         $('.view_music_details').click(function(e) {
-            e.preventDefault()
-            var id = $(this).attr('data-id')
-            uni_modal("Music Details", "<?= base_url . "view_music_details.php?id=" ?>" + id, "modal-large")
-        })
+            e.preventDefault();
+            var id = $(this).attr('data-id');
+            uni_modal("Music Details", "view_music_details.php?id=" + id, "modal-large");
+        });
 
         $('.play_music').click(function(e) {
             e.preventDefault();
             var id = $(this).attr('data-id');
             start_loader();
             $.ajax({
-                url: _base_url_ + "classes/Master.php?f=get_music_details&id=" + id,
+                url:"./classes/Master.php?f=get_music_details&id=" + id,
                 dataType: "JSON",
                 error: err => {
                     alert("There's an error occurred while fetching the audio file.");
@@ -296,7 +296,7 @@ if (isset($_GET['cid'])) {
 
         function updateStreams(id) {
             $.ajax({
-                url: "classes/update_stream.php",
+                url: "/classes/update_stream.php",
                 type: "POST",
                 data: {
                     id: id

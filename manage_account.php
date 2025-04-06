@@ -69,7 +69,7 @@
 							<textarea rows="3" name="about_artist" id="about_artist" class="form-control form-control-sm rounded-0" value="" required><?php echo isset($about_artist) ? $about_artist : ''; ?></textarea>
 						</div>
 						<div class="form-group">
-							<input type="hidden" name="type" id="type" class="form-control form-control-sm rounded-0" required value="1"></input>
+							<input type="hidden" name="type" id="type" class="form-control form-control-sm rounded-0" required value="3"></input>
 						</div>
 					</form>
 				</div>
@@ -110,7 +110,7 @@
 				e.preventDefault();
 				start_loader()
 				$.ajax({
-					url: _base_url_ + 'classes/Artists.php?f=registration',
+					url: 'classes/Artists.php?f=registration',
 					data: new FormData($(this)[0]),
 					cache: false,
 					contentType: false,

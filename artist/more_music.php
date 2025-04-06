@@ -1,38 +1,62 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+require_once '../config.php'; 
+
 $page_title = "Music List";
 $page_description = "";
-if (isset($_GET['cid'])) {
-    $cat_qry = $conn->query("SELECT * FROM `category_list` where `id` = '{$_GET['cid']}' and `delete_flag` = 0 and `status` = 1 ");
-    if ($cat_qry->num_rows > 0) {
-        $result = $cat_qry->fetch_assoc();
-        $category_id = $result['id'];
-        $page_title = $result['name'];
-        $page_description = $result['description'];
+$category_id = null;
+if (isset($_GET['cid']) && !empty($_GET['cid'])) {
+    $cat_qry = $conn->prepare("SELECT * FROM `category_list` WHERE `id` = ? AND `delete_flag` = 0 AND `status` = 1");
+    $cat_qry->bind_param('i', $_GET['cid']);
+    $cat_qry->execute();
+    $result = $cat_qry->get_result();
+    if ($result->num_rows > 0) {
+        $category = $result->fetch_assoc();
+        $category_id = $category['id'];
+        $page_title = $category['name'];
+        $page_description = $category['description'];
     }
 }
 ?>
 
 <style>
-    .music-card {
-        position: relative;
-        background-position: center;
-        height: auto;
-        display: flex;
-        border-radius: 15px;
+    .music-list-container {
+        background: #121212;
+        padding: 20px;
+        border-radius: 10px;
+        color: #fff;
+    }
+
+    .music-list-header {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+        color: #fff;
     }
 
     .music-item {
         display: flex;
         align-items: center;
-        margin-bottom: 20px;
+        padding: 10px;
+        border-radius: 5px;
+        background: #181818;
+        margin-bottom: 10px;
+        transition: background 0.2s ease;
+    }
+
+    .music-item:hover {
+        background: #282828;
     }
 
     .music-banner {
-        width: 70px;
-        height: 70px;
-        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        margin-right: 15px;
+        border-radius: 4px;
         overflow: hidden;
-        margin-right: 20px;
     }
 
     .music-banner img {
@@ -43,43 +67,55 @@ if (isset($_GET['cid'])) {
 
     .music-details {
         flex: 1;
+        display: flex;
+        flex-direction: column;
     }
 
     .music-title {
-        font-weight: bold;
-        margin-bottom: 5px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #fff;
+        margin: 0;
     }
 
-    .music-description {
-        color: #888;
+    .music-artist, .music-category {
+        font-size: 0.9rem;
+        color: #b3b3b3;
+        margin: 2px 0;
     }
 
-    .music-player-field {
+    .music-streams {
+        font-size: 0.85rem;
+        color: #1db954;
+    }
+
+    .music-actions {
         display: flex;
         align-items: center;
     }
 
     .music-btns {
-        padding: 0;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        height: 1.5em;
-        width: 1.5em;
-        font-size: .5em;
-        margin: 0 .5em;
+        margin-left: 10px;
+        background: none;
+        border: 1px solid #b3b3b3;
+        color: #b3b3b3;
+        transition: all 0.2s ease;
     }
 
+    .music-btns:hover {
+        border-color: #fff;
+        color: #fff;
+        background: #333;
+    }
 
-    .music-btns {
-        padding: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 1.5em;
-        width: 1.5em;
-        font-size: .5em;
-        margin: 0 .5em;
+    .music-btns i {
+        font-size: 1rem;
     }
 
     #player-field {
@@ -87,326 +123,201 @@ if (isset($_GET['cid'])) {
         position: fixed;
         bottom: 0;
         left: 0;
-        min-height: 5em;
         width: 100%;
-        background: #000;
-        justify-content: center;
+        background: #181818;
+        padding: 10px 20px;
+        border-top: 1px solid #282828;
+        display: flex;
         align-items: center;
+        justify-content: space-between;
+    }
+
+    #player-img-holder {
+        width: 50px;
+        height: 50px;
+        margin-right: 15px;
+    }
+
+    #player-img-holder img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 4px;
     }
 
     #player-slider {
-        width: 50%;
-        line-height: .8em;
-        padding: .5em;
+        flex: 1;
+        margin: 0 20px;
+    }
+
+    #music-title {
+        font-size: 1rem;
+        color: #fff;
+        margin-bottom: 5px;
+    }
+
+    #music-title .artist {
+        color: #b3b3b3;
     }
 
     #progress-container {
-        height: 7px;
-        width: 100%;
-        background-color: rgb(255 255 255 / 33%);
-        margin: .5em;
+        height: 4px;
+        background: #404040;
+        border-radius: 2px;
         cursor: pointer;
-        border-radius: 8px;
     }
 
     #progress {
-        background-color: #d9c9c9;
-        width: 0%;
-        height: inherit;
-        border-radius: inherit;
-        transition: width 100ms ease-in;
+        background: #1db954;
+        height: 100%;
+        width: 0;
+        border-radius: 2px;
+        transition: width 0.1s ease;
     }
 
     #timer-bar {
         display: flex;
         justify-content: space-between;
-        font-size: 1rem;
+        font-size: 0.8rem;
+        color: #b3b3b3;
+        margin-top: 5px;
     }
 
-    button.play-btn {
-        height: 2.35em;
-        width: 2.5em;
-        border-radius: 50% 50%;
-        padding: 0;
+    .play-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #fff;
+        color: #000;
+        border: none;
         display: flex;
         align-items: center;
         justify-content: center;
+        margin-right: 15px;
     }
-
-    #player-img-holder {
-        position: relative;
-        width: 12vw;
-        height: 13vh;
-    }
-
-    #player-img-holder img {
-        position: absolute;
-        bottom: 0;
-        height: 100%;
-        width: 100%;
-        object-fit: scale-down;
-        object-position: center center;
-        background: #000;
-    }
-
-    .music-btns i {
-        font-size: .7em;
-    }
-    
 </style>
-<div class="row music-card">
-    <div class="col-lg-12 col-md-12 col-md-12 col-xs-12 mx-auto my-5 py5">
-        <div class="card shadow rounded-0">
-            <div class="card-body rounded-0">
-                <div class="container-fluid"></div>
-                <h4 class="heading title-font" style="font-size: 30px">Popular</h4><br><br>
-                <div class="row">
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mx-auto mb-5">
-                        <?php
-                        $where = "";
-                        if (isset($category_id)) {
-                            $where = "and `category_id` = '{$category_id}' ";
-                        }
-                        $music_list = $conn->query("SELECT *, COALESCE((SELECT `name` FROM `category_list` where `music_list`.`category_id` = `category_list`.`id`), 'Unkown Category') as `category_name` FROM `music_list` where `status` = 1 and `delete_flag` = 0 and `audio_path` != ''  {$where} and `artist_id` = '{$_SESSION['userdata']['id']}' order by `streams` desc");
-                        while ($row = $music_list->fetch_assoc()) :
-                        ?>
-                            <div class="music-item hover">
-                                <div class="music-banner">
-                                    <img src="<?= validate_image($row['banner_path']) ?>" alt="<?= $row['title'] ?>">
-                                </div>
-                                <div class="music-details">
-                                    <div class="music-title"><?= $row['title'] ?></div>
-                                    <!-- <div class="music-description"><?= str_replace("\n", "<br>", html_entity_decode($row['description'])) ?></div> -->
-                                    <div class="music-player-field">
-                                        <a href="<?= base_url . $row['audio_path'] ?>" download="<?= $row['title'] . "." . (pathinfo($row['audio_path'], PATHINFO_EXTENSION)) ?>" class="btn btn-md btn-outline-success rounded-circle p-0 music-btns"><i class="fa fa-download"></i></a>&nbsp;&nbsp;
-                                        <a href="javascript:void(0)" data-id="<?= $row['id'] ?>" class="btn btn-md btn-outline-primary rounded-circle p-0 music-btns play_music"><i class="fa fa-play"></i></a> &nbsp;&nbsp;
-                                        <a href="javascript:void(0)" data-id="<?= $row['id'] ?>" class="btn btn-md btn-outline-info rounded-circle p-0 music-btns view_music_details"><i class="fa fa-info"></i></a>
-                                    </div>
-                                    <div>
-                                        <p class="rounded-0 card-title-font text-center w-100"><b><?= $row['streams'] ?></b></p>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php endwhile; ?>
+
+<div class="container-fluid music-list-container">
+    <h4 class="music-list-header"><?= htmlspecialchars($page_title) ?></h4>
+    <div class="row">
+        <div class="col-12">
+            <?php
+            $sql = "SELECT m.*, c.name AS `category_name`, a.stage_name AS `artist_name` 
+                    FROM `music_list` m 
+                    LEFT JOIN `category_list` c ON m.category_id = c.id 
+                    LEFT JOIN `artist_list` a ON m.artist_id = a.id 
+                    WHERE m.`status` = 1 AND m.`delete_flag` = 0 AND m.`audio_path` != '' 
+                    AND m.`artist_id` = ? " . ($category_id ? "AND m.`category_id` = ?" : "") . " 
+                    ORDER BY m.`streams` DESC";
+
+            $stmt = $conn->prepare($sql);
+            if ($category_id) {
+                $stmt->bind_param('ii', $_SESSION['userdata']['id'], $category_id);
+            } else {
+                $stmt->bind_param('i', $_SESSION['userdata']['id']);
+            }
+            $stmt->execute();
+            $music_list = $stmt->get_result();
+
+            if ($music_list->num_rows == 0) {
+                echo "<p>No music found for this artist" . ($category_id ? " in this category" : "") . ".</p>";
+            }
+
+            while ($row = $music_list->fetch_assoc()) :
+            ?>
+                <div class="music-item">
+                    <div class="music-banner">
+                        <img src="<?= file_exists($row['banner_path']) && !empty($row['banner_path']) ? $row['banner_path'] : '/ESAMS/uploads/default_banner.jpg' ?>" alt="<?= htmlspecialchars($row['title']) ?>">
+                    </div>
+                    <div class="music-details">
+                        <div class="music-title"><?= htmlspecialchars($row['title']) ?></div>
+                        <div class="music-artist"><?= htmlspecialchars($row['artist_name'] ?? 'Unknown Artist') ?></div>
+                        <div class="music-category"><?= htmlspecialchars($row['category_name'] ?? 'Unknown Category') ?> • <span class="music-streams"><?= number_format($row['streams']) ?> streams</span></div>
+                    </div>
+                    <div class="music-actions">
+                        <a href="<?= $row['audio_path'] ?>" download="<?= htmlspecialchars($row['title'] . '.' . pathinfo($row['audio_path'], PATHINFO_EXTENSION)) ?>" class="music-btns"><i class="fa fa-download"></i></a>
+                        <a href="javascript:void(0)" data-id="<?= $row['id'] ?>" class="music-btns play_music"><i class="fa fa-play"></i></a>
+                        <a href="javascript:void(0)" data-id="<?= $row['id'] ?>" class="music-btns view_music_details"><i class="fa fa-info"></i></a>
                     </div>
                 </div>
+            <?php endwhile; ?>
+        </div>
+    </div>
 
-                <div id="player-field">
-                    <div>
-                        <div id="player-img-holder">
-                            <img src="<?= validate_image("") ?>" alt="" />
-                        </div>
-                    </div>
-                    <div>
-                        <button class="play-btn" id="play" type="button"><i class="fa fa-play"></i></button>
-                    </div>
-                    <div id="player-slider">
-                        <div id="music-title" class="text-light"><span id="title">Music Title</span> - <span class="mx-4 text-muted" id="artist">Test</span></div>
-                        <div id="progress-container">
-                            <div id="progress"></div>
-                        </div>
-                        <div id="timer-bar">
-                            <span id="timer">0:00</span>
-                            <span id="duration"></span>
-                        </div>
-                    </div>
-                    <div id="volume-control" class="px-2">
-                        <a href="javascript:void(0)" id="volume-down" class="text-muted mx-2"><i class="fa fa-volume-down"></i></a>
-                        <a href="javascript:void(0)" id="volume-up" class="text-muted mx-2"><i class="fa fa-volume-up"></i></a>
-                    </div>
-                </div>
-                <audio src="" class="d-none" id="player-el"></audio>
-                <script>
-                    const banner_img = document.querySelector('#player-img-holder>img');
-                    const disc = document.getElementById('player-el');
-                    const title = document.getElementById('title');
-                    const artist = document.getElementById('artist');
-                    const progressContainer = document.getElementById('progress-container');
-                    const progress = document.getElementById('progress');
-                    const timer = document.getElementById('timer');
-                    const duration = document.getElementById('duration');
-                    const play = document.getElementById('play');
-                    var volume = .5;
-                    disc.volume = volume;
-                    $(function() {
-                        $('#search_cat').on('input change', function(e) {
-                            e.preventDefault()
-                            var _search = $(this).val().toLowerCase()
-
-                            $('.cat-items').each(function(e) {
-                                var _text = $(this).text().toLowerCase()
-                                if (_text.includes(_search) === true) {
-                                    $(this).toggle(true)
-                                } else {
-                                    $(this).toggle(false)
-                                }
-                            })
-                        })
-                        $('.view_music_details').click(function(e) {
-                            e.preventDefault()
-                            var id = $(this).attr('data-id')
-                            uni_modal("Music Details", "<?= "view_music_details.php?id=" ?>" + id, "modal-large")
-                        })
-
-                        $('.play_music').click(function(e) {
-                            e.preventDefault()
-                            var id = $(this).attr('data-id')
-                            start_loader()
-                            $.ajax({
-                                url: _base_url_ + "classes/Master.php?f=get_music_details&id=" + id,
-                                dataType: "JSON",
-                                error: err => {
-                                    alert("There's an error occurred while fetching the audio file.")
-                                    end_loader()
-                                    console.error(err)
-
-                                },
-                                success: function(resp) {
-                                    if (typeof resp == 'object') {
-                                        loadSong(resp)
-                                        end_loader()
-                                        $('#player-field').css('display', "flex")
-                                    } else {
-                                        alert("There's an error occurred while fetching the audio file.")
-                                        end_loader()
-                                        console.error(resp)
-                                    }
-                                }
-                            })
-                        })
-                        $('#play').click(function(e) {
-                            e.preventDefault()
-                            playPauseMedia()
-                        })
-                        $('#volume-down').click(function(e) {
-                            e.preventDefault()
-                            change_volume();
-                        })
-                        $('#volume-up').click(function(e) {
-                            e.preventDefault()
-                            change_volume("up");
-                        })
-                    })
-
-                    function loadSong(song) {
-                        var dur = 0;
-                        banner_img.src = song.coverPath;
-                        disc.src = song.discPath;
-                        title.textContent = song.title;
-                        artist.textContent = song.artist;
-                        disc.addEventListener('canplaythrough', function() {
-                            dur = disc.duration
-                            mins = Math.floor(Math.abs(dur / 60))
-                            mins = String(mins).padStart('2', 0)
-                            sec = Math.floor(dur - (parseInt(mins) * 60))
-                            sec = String(sec).padStart('2', 0)
-                            duration.textContent = `${mins}:${sec}`
-                        })
-                        playPauseMedia()
-                    }
-
-                    function playPauseMedia() {
-                        if (disc.paused) {
-                            disc.play();
-                        } else {
-                            disc.pause();
-                        }
-                        updatePlayPauseIcon()
-                    }
-                    // Update icon
-                    function updatePlayPauseIcon() {
-                        if (disc.paused) {
-                            play.querySelector('i').classList.remove('fa-pause');
-                            play.querySelector('i').classList.add('fa-play');
-                        } else {
-                            play.querySelector('i').classList.remove('fa-play');
-                            play.querySelector('i').classList.add('fa-pause');
-                        }
-                    }
-
-                    // Update progress bar
-                    function updateProgress() {
-                        progress.style.width = (disc.currentTime / disc.duration) * 100 + '%';
-
-                        let minutes = Math.floor(disc.currentTime / 60);
-                        let seconds = Math.floor(disc.currentTime % 60);
-                        if (seconds < 10) {
-                            seconds = '0' + seconds;
-                        }
-                        timer.textContent = `${minutes}:${seconds}`;
-                    }
-
-                    // Reset the progress
-                    function resetProgress() {
-                        progress.style.width = 0 + '%';
-                        timer.textContent = '0:00';
-                    }
-                    // Navigate song slider
-                    function progressSlider(ev) {
-                        var is_playing = !disc.paused
-                        if (is_playing)
-                            disc.pause()
-                        const totalWidth = this.clientWidth;
-                        const clickWidth = ev.offsetX;
-                        const clickWidthRatio = clickWidth / totalWidth;
-                        disc.currentTime = clickWidthRatio * disc.duration;
-                        if (is_playing)
-                            disc.play()
-                        document.addEventListener('mousemove', slideMoving);
-                        document.addEventListener('mouseup', function() {
-                            if (is_playing)
-                                disc.play()
-                            document.removeEventListener('mousemove', slideMoving);
-                        });
-
-                    }
-
-                    function change_volume($dir = "down") {
-                        var vol = volume * 10
-                        if ($dir == "down") {
-                            vol--;
-                            if (vol <= 0)
-                                vol = 0;
-                        } else {
-                            vol++;
-                            if (vol >= 10)
-                                vol = 10;
-                        }
-                        volume = vol / 10
-                        disc.volume = volume
-                    }
-
-                    // Navigate song slider while moving
-                    function slideMoving(ev) {
-                        var is_playing = !disc.paused
-                        if (is_playing)
-                            disc.pause()
-                        const totalWidth = progressContainer.clientWidth;
-                        const clickWidth = ev.offsetX;
-                        const clickWidthRatio = clickWidth / totalWidth;
-                        disc.currentTime = clickWidthRatio * disc.duration;
-                        if (is_playing)
-                            disc.play()
-                    }
-
-                    function song_ended() {
-                        $('#player-field').hide()
-                        console.log('audio ended')
-                    }
-
-                    // Various events on disc
-                    disc.addEventListener('play', updatePlayPauseIcon);
-                    disc.addEventListener('pause', updatePlayPauseIcon);
-                    disc.addEventListener('timeupdate', updateProgress);
-                    disc.addEventListener('ended', song_ended);
-
-
-                    // Move to different place in the song
-                    progressContainer.addEventListener('mousedown', progressSlider);
-                </script>
-
+    <div id="player-field">
+        <div id="player-img-holder">
+            <img src="/ESAMS/uploads/default_banner.jpg" alt="">
+        </div>
+        <button class="play-btn" id="play"><i class="fa fa-play"></i></button>
+        <div id="player-slider">
+            <div id="music-title"><span id="title">Music Title</span> - <span class="artist" id="artist">Artist</span></div>
+            <div id="progress-container">
+                <div id="progress"></div>
+            </div>
+            <div id="timer-bar">
+                <span id="timer">0:00</span>
+                <span id="duration"></span>
             </div>
         </div>
     </div>
-</div>
+    <audio src="" class="d-none" id="player-el"></audio>
+
+    <script>
+        const disc = document.getElementById('player-el');
+        const play = document.getElementById('play');
+        disc.volume = 0.5;
+
+        $(function() {
+            $('.view_music_details').click(function(e) {
+                e.preventDefault();
+                var id = $(this).attr('data-id');
+                if (typeof uni_modal === 'function') {
+                    uni_modal("Music Details", "view_music_details.php?id=" + id, "modal-large");
+                } else {
+                    console.log('uni_modal not defined');
+                    window.location.href = "view_music_details.php?id=" + id;
+                }
+            });
+
+            $('.play_music').click(function(e) {
+                e.preventDefault();
+                var id = $(this).attr('data-id');
+                if (typeof start_loader === 'function') start_loader();
+                $.ajax({
+                    url: "/ESAMS/classes/Master.php?f=get_music_details&id=" + id,
+                    dataType: "json",
+                    error: err => {
+                        alert("Error fetching audio file.");
+                        if (typeof end_loader === 'function') end_loader();
+                        console.error(err);
+                    },
+                    success: function(resp) {
+                        if (typeof resp === 'object' && resp.discPath) {
+                            disc.src = resp.discPath;
+                            document.querySelector('#player-img-holder img').src = resp.coverPath || '/ESAMS/uploads/default_banner.jpg';
+                            document.getElementById('title').textContent = resp.title;
+                            document.getElementById('artist').textContent = resp.artist;
+                            $('#player-field').css('display', 'flex');
+                            disc.play();
+                        } else {
+                            alert("Invalid audio file data.");
+                            console.error(resp);
+                        }
+                        if (typeof end_loader === 'function') end_loader();
+                    }
+                });
+            });
+
+            $('#play').click(function(e) {
+                e.preventDefault();
+                if (disc.paused) {
+                    disc.play();
+                } else {
+                    disc.pause();
+                }
+                play.querySelector('i').classList.toggle('fa-play', disc.paused);
+                play.querySelector('i').classList.toggle('fa-pause', !disc.paused);
+            });
+        });
+    </script>
 </div>

@@ -16,10 +16,9 @@
         <span class="info-box-text">Active Categories</span>
         <span class="info-box-number text-right h5">
           <?php
-          $category = $conn->query("SELECT * FROM category_list where delete_flag = 0 and `status` = 1")->num_rows;
-          echo format_num($category);
+          $category = $conn->query("SELECT * FROM category_list WHERE delete_flag = 0 AND `status` = 1")->num_rows;
+          echo number_format($category);
           ?>
-          <?php ?>
         </span>
       </div>
       <!-- /.info-box-content -->
@@ -34,10 +33,9 @@
         <span class="info-box-text">Published Music</span>
         <span class="info-box-number text-right h5">
           <?php
-          $musics = $conn->query("SELECT * FROM music_list where delete_flag = 0 and `status` = 1")->num_rows;
-          echo format_num($musics);
+          $musics = $conn->query("SELECT * FROM music_list WHERE delete_flag = 0 AND `status` = 1")->num_rows;
+          echo number_format($musics);
           ?>
-          <?php ?>
         </span>
       </div>
       <!-- /.info-box-content -->
@@ -47,5 +45,5 @@
   <!-- /.col -->
 </div>
 <div class="container-fluid text-center">
-  <img src="<?= validate_image($_settings->info('cover')) ?>" alt="system-cover" id="system-cover" class="img-fluid">
+  <img src="../uploads/cover3.jpg" alt="system-cover" id="system-cover" class="img-fluid">
 </div>

@@ -54,12 +54,13 @@
 
       <div class="d-flex align-items-center ">
         <button type="button" class="btn btn-outline-secondary login">
-          <a class="font-weight-bolder text-light mx-2 text-decoration-none" style="font-size: 20px" href="./artist/login.php">For Artists</a>
+          <a class="font-weight-bolder text-light mx-2 text-decoration-none" style="font-size: 20px" href="./Login/">SIGN-IN</a>
         </button>
       </div>
+      &nbsp;&nbsp;
       <div class="d-flex align-items-center ">
-        <button class="btn btn-block btn-md btn-default btn-dark-purple border-primary login">
-          <a class="font-weight-bolder text-light mx-2 text-decoration-none" style="font-size: 20px" href="./admin/login.php">ESAMS</a>
+        <button type="button" class="btn btn-outline-secondary login">
+          <a class="font-weight-bolder text-light mx-2 text-decoration-none" style="font-size: 20px" href="./registration/">Register</a>
         </button>
       </div>
     </div>

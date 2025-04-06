@@ -109,7 +109,7 @@
 	function delete_music($id) {
 		start_loader();
 		$.ajax({
-			url: _base_url_ + "classes/Master.php?f=delete_music",
+			url:"../classes/Master.php?f=delete_music",
 			method: "POST",
 			data: {
 				id: $id

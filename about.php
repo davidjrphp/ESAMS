@@ -3,7 +3,7 @@
         <div class="card shadow rounded-0">
             <div class="card-body rounded-0">
                 <div class="container-fluid">
-                    <?= html_entity_decode(file_get_contents(base_app."about.html")) ?>
+                    <?= html_entity_decode(file_get_contents("about.html")) ?>
                 </div>
             </div>
         </div>

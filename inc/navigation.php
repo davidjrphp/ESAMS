@@ -2,7 +2,7 @@
 <!-- Main Sidebar Container -->
       <aside class="main-sidebar sidebar-dark-primary elevation-4 sidebar-no-expand">
         <!-- Brand Logo -->
-        <a href="<?php echo base_url ?>admin" class="brand-link bg-gradient-navy text-sm">
+        <a href="./admin" class="brand-link bg-gradient-navy text-sm">
         <img src="<?php echo validate_image($_settings->info('logo'))?>" alt="Store Logo" class="brand-image img-circle elevation-3" style="opacity: .8;width: 1.5rem;height: 1.5rem;max-height: unset">
         <span class="brand-text font-weight-light"><?php echo $_settings->info('short_name') ?></span>
         </a>
@@ -42,7 +42,7 @@
                     <?php if($_settings->userdata('type') == 1): ?>
                     <li class="nav-header">Maintenance</li>
                     <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=categories" class="nav-link nav-categories">
+                      <a href="./admin/?page=categories" class="nav-link nav-categories">
                         <i class="nav-icon fas fa-th-list"></i>
                         <p>
                           Category List
@@ -50,7 +50,7 @@
                       </a>
                     </li>
                     <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=user/list" class="nav-link nav-user/list">
+                      <a href="./admin/?page=user/list" class="nav-link nav-user/list">
                         <i class="nav-icon fas fa-users-cog"></i>
                         <p>
                           User List
@@ -58,7 +58,7 @@
                       </a>
                     </li>
                     <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=system_info" class="nav-link nav-system_info">
+                      <a href="./admin/?page=system_info" class="nav-link nav-system_info">
                         <i class="nav-icon fas fa-tools"></i>
                         <p>
                           Settings
