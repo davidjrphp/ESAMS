@@ -214,7 +214,7 @@
 <footer class="py-5 footer">
   <div class="container">
     <h1>
-      <img src="<?php echo validate_image($_settings->info('logo')) ?>" width="60" height="60" class="d-inline-block align-top rounded-circle" alt="" loading="lazy">
+      <img src="/ESAMS/uploads/logo1.jpg" width="60" height="60" class="d-inline-block align-top rounded-circle" alt="" loading="lazy">
       <?php echo $_settings->info('short_name') ?>
     </h1>
 

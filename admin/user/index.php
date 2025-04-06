@@ -44,7 +44,7 @@ foreach ($user->fetch_array() as $k => $v) {
 					</div>
 				</div>
 				<div class="form-group d-flex justify-content-center">
-					<img src="<?php echo validate_image(isset($meta['avatar']) ? $meta['avatar'] : '') ?>" alt="" id="cimg" class="img-fluid img-thumbnail">
+					<img src="<?php echo isset($meta['avatar']) ? $meta['avatar'] : '' ?>" alt="" id="cimg" class="img-fluid img-thumbnail">
 				</div>
 			</form>
 		</div>

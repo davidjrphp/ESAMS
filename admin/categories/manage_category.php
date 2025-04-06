@@ -37,7 +37,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 			 $('.err-msg').remove();
 			start_loader();
 			$.ajax({
-				url:_base_url_+"classes/Master.php?f=save_category",
+				url: "/ESAMS/classes/Master.php?f=save_category",
 				data: new FormData($(this)[0]),
                 cache: false,
                 contentType: false,
@@ -54,7 +54,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 					if(typeof resp =='object' && resp.status == 'success'){
 						// location.reload()
 						alert_toast(resp.msg, 'success')
-						uni_modal("<i class='fa fa-th-list'></i> category Details ","categories/view_category.php?id="+resp.cid)
+						uni_modal("<i class='fa fa-th-list'></i> category Details ","/ESAMS/categories/view_category.php?id="+resp.cid)
 						$('#uni_modal').on('hide.bs.modal', function(){
 							location.reload()
 						})

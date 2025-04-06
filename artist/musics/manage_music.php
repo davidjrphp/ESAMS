@@ -152,7 +152,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 				success: function(resp) {
 					if (typeof resp == 'object' && resp.status == 'success') {
 						// location.reload()
-						location.replace("/artist/?page=musics/view_music&id=" + resp.mid)
+						location.replace("/ESAMS/artist/?page=musics/view_music&id=" + resp.mid)
 					} else if (resp.status == 'failed' && !!resp.msg) {
 						var el = $('<div>')
 						el.addClass("alert alert-danger err-msg").text(resp.msg)

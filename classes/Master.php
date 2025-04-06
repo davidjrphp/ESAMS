@@ -1,5 +1,4 @@
 <?php
-ini_set('display_errors', 1);
 require_once('../config.php');
 class Master extends DBConnection
 {
@@ -131,148 +130,9 @@ class Master extends DBConnection
 				if (!in_array($_FILES['banner_img']['type'], $accept)) {
 					$resp['msg'] .= "But failed to upload Banner image due to invalid file type.";
 				} else {
-					if (!is_dir(base_app . "../uploads/music_banners/"))
-						mkdir(base_app . "../uploads/music_banners/");
-					$fname = "../uploads/music_banners/" . $fname;
-					$i = 0;
-					while (true) {
-						$tmp_fname = $fname . ($i > 0 ? "_{$i}" : "") . "." . $ext;
-						/**
-						 * Check if filename already exists
-						 */
-						if (is_file(base_app . $tmp_fname)) {
-							$i++;
-						} else {
-							$fname = $tmp_fname;
-							break;
-						}
-					}
-					if ($_FILES['banner_img']['type'] == 'image/jpeg')
-						$uploadfile = imagecreatefromjpeg($_FILES['banner_img']['tmp_name']);
-					elseif ($_FILES['banner_img']['type'] == 'image/png')
-						$uploadfile = imagecreatefrompng($_FILES['banner_img']['tmp_name']);
-					if (!$uploadfile) {
-						$err = "Image is invalid";
-					}
-					list($width, $height) = getimagesize($_FILES['banner_img']['tmp_name']);
-					$max_size = 480;
-					if ($width > $height) {
-						if ($width > $max_size) {
-							$perc = ($width - $max_size) / $width;
-							$new_width = $max_size;
-							$new_height = $height - ($height * $perc);
-						} else {
-							$new_width = $width;
-							$new_height = $height;
-						}
-					} elseif ($height > $width) {
-						if ($height > $max_size) {
-							$perc = ($height - $max_size) / $height;
-							$new_height = $max_size;
-							$new_width = $width - ($width * $perc);
-						} else {
-							$new_width = $width;
-							$new_height = $height;
-						}
-					} else {
-						if ($height > $max_size) {
-							$new_width = $max_size;
-							$new_height = $max_size;
-						} else {
-							$new_width = $width;
-							$new_height = $height;
-						}
-					}
-
-					$temp = imagescale($uploadfile, $new_width, $new_height);
-					if (is_file(base_app . $fname))
-						unlink(base_app . $fname);
-					$upload = imagepng($temp, $fname);
-					if ($upload) {
-						$this->conn->query("UPDATE `music_list` set `banner_path` = '{$fname}' where `id` = $mid ");
-					} else {
-						$resp['msg'] .= "Uploading Banner Image file failed due to unknown reason.";
-					}
-					imagedestroy($temp);
-				}
-			}
-
-			if (!empty($_FILES['audio_file']['tmp_name'])) {
-				$file_parts = pathinfo($_FILES['audio_file']['name']);
-				$ext = $file_parts['extension'];
-				$fname = $file_parts['filename'];
-				if (!is_dir(base_app . "../uploads/audio/"))
-					mkdir(base_app . "../uploads/audio/");
-				$fname = "../uploads/audio/" . $fname;
-				if (!stristr(mime_content_type($_FILES['audio_file']['tmp_name']), 'audio')) {
-					$resp['msg'] .= "But failed to upload audio file due to invalid file type.";
-				} else {
-					$i = 0;
-					while (true) {
-						$tmp_fname = $fname . ($i > 0 ? "_{$i}" : "") . "." . $ext;
-						if (is_file(base_app . $tmp_fname)) {
-							$i++;
-						} else {
-							$fname = $tmp_fname;
-							break;
-						}
-					}
-
-					$upload  = move_uploaded_file($_FILES['audio_file']['tmp_name'], base_app . $fname);
-					if ($upload) {
-						$this->conn->query("UPDATE `music_list` set `audio_path` = '{$fname}' where `id` = '{$mid}'");
-					} else {
-						$resp['msg'] .= "Uploading Audio file failed due to unknown reason.";
-					}
-				}
-			}
-		} else {
-			$resp['status'] = 'failed';
-			$resp['err'] = $this->conn->error . "[{$sql}]";
-		}
-		if ($resp['status'] == 'success')
-			$this->settings->set_flashdata('success', $resp['msg']);
-		return json_encode($resp);
-	}
-
-	function upload_music()
-	{
-		extract($_POST);
-		$data = "";
-		foreach ($_POST as $k => $v) {
-			if (!in_array($k, array('id'))) {
-				if (!empty($data)) $data .= ",";
-				$v = htmlspecialchars($this->conn->real_escape_string($v));
-				$data .= " `{$k}`='{$v}' ";
-			}
-		}
-
-		if (empty($id)) {
-			$sql = "INSERT INTO `music_list` set {$data} ";
-		} else {
-			$sql = "UPDATE `music_list` set {$data} where id = '{$id}' ";
-		}
-		$save = $this->conn->query($sql);
-		if ($save) {
-			$mid = !empty($id) ? $id : $this->conn->insert_id;
-			$resp['mid'] = $mid;
-			$resp['status'] = 'success';
-			if (empty($id))
-				$resp['msg'] = "Your Upload was successful.";
-			else
-				$resp['msg'] = " Song successfully updated.";
-
-			if (!empty($_FILES['banner_img']['tmp_name'])) {
-				$file_parts = pathinfo($_FILES['banner_img']['name']);
-				$fname = $file_parts['filename'];
-				$ext = $file_parts['extension'];
-				$accept = array('image/jpeg', 'image/png');
-				if (!in_array($_FILES['banner_img']['type'], $accept)) {
-					$resp['msg'] .= "But failed to upload Banner image due to invalid file type.";
-				} else {
-					if (!is_dir("../uploads/music_banners/"))
-						mkdir("../uploads/music_banners/");
-					$fname = "../uploads/music_banners/" . $fname;
+					if (!is_dir(base_app . "uploads/music_banners/"))
+						mkdir(base_app . "uploads/music_banners/");
+					$fname = "uploads/music_banners/" . $fname;
 					$i = 0;
 					while (true) {
 						$tmp_fname = $fname . ($i > 0 ? "_{$i}" : "") . "." . $ext;
@@ -340,9 +200,148 @@ class Master extends DBConnection
 				$file_parts = pathinfo($_FILES['audio_file']['name']);
 				$ext = $file_parts['extension'];
 				$fname = $file_parts['filename'];
-				if (!is_dir("../uploads/audio/"))
-					mkdir("../uploads/audio/");
-				$fname = "../uploads/audio/" . $fname;
+				if (!is_dir(base_app . "uploads/audio/"))
+					mkdir(base_app . "uploads/audio/");
+				$fname = "uploads/audio/" . $fname;
+				if (!stristr(mime_content_type($_FILES['audio_file']['tmp_name']), 'audio')) {
+					$resp['msg'] .= "But failed to upload audio file due to invalid file type.";
+				} else {
+					$i = 0;
+					while (true) {
+						$tmp_fname = $fname . ($i > 0 ? "_{$i}" : "") . "." . $ext;
+						if (is_file(base_app . $tmp_fname)) {
+							$i++;
+						} else {
+							$fname = $tmp_fname;
+							break;
+						}
+					}
+
+					$upload  = move_uploaded_file($_FILES['audio_file']['tmp_name'], base_app . $fname);
+					if ($upload) {
+						$this->conn->query("UPDATE `music_list` set `audio_path` = '{$fname}' where `id` = '{$mid}'");
+					} else {
+						$resp['msg'] .= "Uploading Audio file failed due to unknown reason.";
+					}
+				}
+			}
+		} else {
+			$resp['status'] = 'failed';
+			$resp['err'] = $this->conn->error . "[{$sql}]";
+		}
+		if ($resp['status'] == 'success')
+			$this->settings->set_flashdata('success', $resp['msg']);
+		return json_encode($resp);
+	}
+
+	function upload_music()
+	{
+		extract($_POST);
+		$data = "";
+		foreach ($_POST as $k => $v) {
+			if (!in_array($k, array('id'))) {
+				if (!empty($data)) $data .= ",";
+				$v = htmlspecialchars($this->conn->real_escape_string($v));
+				$data .= " `{$k}`='{$v}' ";
+			}
+		}
+
+		if (empty($id)) {
+			$sql = "INSERT INTO `music_list` set {$data} ";
+		} else {
+			$sql = "UPDATE `music_list` set {$data} where id = '{$id}' ";
+		}
+		$save = $this->conn->query($sql);
+		if ($save) {
+			$mid = !empty($id) ? $id : $this->conn->insert_id;
+			$resp['mid'] = $mid;
+			$resp['status'] = 'success';
+			if (empty($id))
+				$resp['msg'] = "Your Upload was successful.";
+			else
+				$resp['msg'] = " Song successfully updated.";
+
+			if (!empty($_FILES['banner_img']['tmp_name'])) {
+				$file_parts = pathinfo($_FILES['banner_img']['name']);
+				$fname = $file_parts['filename'];
+				$ext = $file_parts['extension'];
+				$accept = array('image/jpeg', 'image/png');
+				if (!in_array($_FILES['banner_img']['type'], $accept)) {
+					$resp['msg'] .= "But failed to upload Banner image due to invalid file type.";
+				} else {
+					if (!is_dir(base_app . "uploads/music_banners/"))
+						mkdir(base_app . "uploads/music_banners/");
+					$fname = "uploads/music_banners/" . $fname;
+					$i = 0;
+					while (true) {
+						$tmp_fname = $fname . ($i > 0 ? "_{$i}" : "") . "." . $ext;
+						/**
+						 * Check if filename already exists
+						 */
+						if (is_file(base_app . $tmp_fname)) {
+							$i++;
+						} else {
+							$fname = $tmp_fname;
+							break;
+						}
+					}
+					if ($_FILES['banner_img']['type'] == 'image/jpeg')
+						$uploadfile = imagecreatefromjpeg($_FILES['banner_img']['tmp_name']);
+					elseif ($_FILES['banner_img']['type'] == 'image/png')
+						$uploadfile = imagecreatefrompng($_FILES['banner_img']['tmp_name']);
+					if (!$uploadfile) {
+						$err = "Image is invalid";
+					}
+					list($width, $height) = getimagesize($_FILES['banner_img']['tmp_name']);
+					$max_size = 480;
+					if ($width > $height) {
+						if ($width > $max_size) {
+							$perc = ($width - $max_size) / $width;
+							$new_width = $max_size;
+							$new_height = $height - ($height * $perc);
+						} else {
+							$new_width = $width;
+							$new_height = $height;
+						}
+					} elseif ($height > $width) {
+						if ($height > $max_size) {
+							$perc = ($height - $max_size) / $height;
+							$new_height = $max_size;
+							$new_width = $width - ($width * $perc);
+						} else {
+							$new_width = $width;
+							$new_height = $height;
+						}
+					} else {
+						if ($height > $max_size) {
+							$new_width = $max_size;
+							$new_height = $max_size;
+						} else {
+							$new_width = $width;
+							$new_height = $height;
+						}
+					}
+
+					$temp = imagescale($uploadfile, $new_width, $new_height);
+					if (is_file(base_app . $fname))
+						unlink(base_app . $fname);
+					$upload = imagepng($temp, base_app . $fname);
+					if ($upload) {
+						$this->conn->query("UPDATE `music_list` set `banner_path` = '{$fname}' where `id` = $mid ");
+					} else {
+						$resp['msg'] .= "Uploading Banner Image file failed due to unknown reason.";
+					}
+					imagedestroy($temp);
+				}
+			}
+
+			if (!empty($_FILES['audio_file']['tmp_name'])) {
+				$file_parts = pathinfo($_FILES['audio_file']['name']);
+				$ext = $file_parts['extension'];
+				$fname = $file_parts['filename'];
+				if (!is_dir(base_app . "uploads/audio/"))
+					mkdir(base_app . "uploads/audio/");
+				$fname = "uploads/audio/" . $fname;
 				if (!stristr(mime_content_type($_FILES['audio_file']['tmp_name']), 'audio')) {
 					$resp['msg'] .= "But failed to upload audio file due to invalid file type.";
 				} else {

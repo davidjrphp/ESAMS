@@ -33,7 +33,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 	<div class="card-header">
 		<h3 class="card-title"><?= isset($id) ? "Update Music Details" : "Add New Music Entry" ?></h3>
 		<div class="card-tools">
-			<a href="<?= base_url . "admin/?page=musics" ?>" class="btn btn-flat btn-light bg-light"><span class="fas fa-angle-left"></span> Back to List</a>
+			<a href="<?= "/ESAMS/admin/?page=musics" ?>" class="btn btn-flat btn-light bg-light"><span class="fas fa-angle-left"></span> Back to List</a>
 		</div>
 	</div>
 	<div class="card-body">
@@ -72,7 +72,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 					</div>
 				</div>
 				<div class="form-group d-flex justify-content-center">
-					<img src="<?php echo validate_image((isset($banner_path) ? $banner_path : "")) ?>" alt="" id="BannerViewer" class="img-fluid img-thumbnail bg-gradient-dark border-dark">
+					<img src="<?php echo (isset($banner_path) ? $banner_path : "") ?>" alt="" id="BannerViewer" class="img-fluid img-thumbnail bg-gradient-dark border-dark">
 				</div>
 				<div class="form-group">
 					<label for="" class="control-label">Audio File</label>
@@ -82,10 +82,10 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 					</div>
 					<?php if (isset($audio_path) && !empty($audio_path)) : ?>
 						<div class="pl-4">
-							<audio src="<?= base_url . $audio_path ?>" controls></audio>
+							<audio src="<?= $audio_path ?>" controls></audio>
 						</div>
 						<div class="pl-4">
-							<a href="<?= base_url . $audio_path ?>" target="_blank"><?= (pathinfo($audio_path, PATHINFO_FILENAME)) . "." . (pathinfo($audio_path, PATHINFO_EXTENSION))  ?></a>
+							<a href="<?= $audio_path ?>" target="_blank"><?= (pathinfo($audio_path, PATHINFO_FILENAME)) . "." . (pathinfo($audio_path, PATHINFO_EXTENSION))  ?></a>
 						</div>
 					<?php endif; ?>
 				</div>
@@ -142,7 +142,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 			$('.err-msg').remove();
 			start_loader();
 			$.ajax({
-				url: _base_url_ + "classes/Master.php?f=save_music",
+				url: "/ESAMS/classes/Master.php?f=save_music",
 				data: new FormData($(this)[0]),
 				cache: false,
 				contentType: false,
@@ -158,7 +158,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 				success: function(resp) {
 					if (typeof resp == 'object' && resp.status == 'success') {
 						// location.reload()
-						location.replace("<?= base_url ?>admin/?page=musics/view_music&id=" + resp.mid)
+						location.replace("/ESAMS/admin/?page=musics/view_music&id=" + resp.mid)
 					} else if (resp.status == 'failed' && !!resp.msg) {
 						var el = $('<div>')
 						el.addClass("alert alert-danger err-msg").text(resp.msg)

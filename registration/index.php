@@ -35,6 +35,11 @@
 							<input type="email" class="form-control form-control-sm" name="email" required value="<?php echo isset($email) ? $email : '' ?>">
 							<small id="#msg"></small>
 						</div>
+                        <div class="form-group">
+							<label class="control-label">Username</label>
+							<input type="text" class="form-control form-control-sm" name="username" required value="<?php echo isset($username) ? $username : '' ?>">
+							<small id="#msg"></small>
+						</div>
 
 						<div class="form-group">
 							<label class="control-label">Password</label>
@@ -107,26 +112,31 @@
 				}
 			}
 			$('#manage-artist').submit(function(e) {
-				e.preventDefault();
-				start_loader()
-				$.ajax({
-					url: '../classes/Artists.php?f=registration',
-					data: new FormData($(this)[0]),
-					cache: false,
-					contentType: false,
-					processData: false,
-					method: 'POST',
-					type: 'POST',
-					success: function(resp) {
-						if (resp == 1) {
-							location.href = '/?page=login2.php'
-						} else {
-							$('#msg').html('<div class="alert alert-danger">Email already exist</div>')
-							end_loader()
-						}
-					}
-				})
-			})
+    e.preventDefault();
+    start_loader();
+    $.ajax({
+        url: '../classes/Artists.php?f=registration',
+        data: new FormData($(this)[0]),
+        cache: false,
+        contentType: false,
+        processData: false,
+        method: 'POST',
+        dataType: 'json', // Tell jQuery to parse the response as JSON
+        success: function(resp) {
+            if (resp.status === 'success') {
+                location.href = '/ESAMS/Login/';
+            } else {
+                $('#msg').html('<div class="alert alert-danger">' + (resp.msg || 'An error occurred') + '</div>');
+                end_loader();
+            }
+        },
+        error: function(xhr, status, error) {
+            $('#msg').html('<div class="alert alert-danger">AJAX error: ' + error + '</div>');
+            end_loader();
+            console.error(xhr, status, error);
+        }
+    });
+});
 		</script>
 	</div>
 	<!-- /.content-wrapper -->

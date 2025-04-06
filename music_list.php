@@ -173,7 +173,7 @@ if (isset($_GET['cid'])) {
                     <div class="music-item">
                         <div class="card rounded-0 card-outline card-primary  h-100">
                             <div class="card-img-top music-banner">
-                                <img src="<?= validate_image($row['banner_path']) ?>" alt="<?= $row['title'] ?>">
+                                <img src="<?php echo $row['banner_path'] ?>" alt="<?= $row['title'] ?>">
                             </div>
                             <div class="card-body rounded-0">
                                 <div class="container-fluid">
@@ -270,7 +270,7 @@ if (isset($_GET['cid'])) {
             var id = $(this).attr('data-id');
             start_loader();
             $.ajax({
-                url:"./classes/Master.php?f=get_music_details&id=" + id,
+                url:"/ESAMS/classes/Master.php?f=get_music_details&id=" + id,
                 dataType: "JSON",
                 error: err => {
                     alert("There's an error occurred while fetching the audio file.");
@@ -296,7 +296,7 @@ if (isset($_GET['cid'])) {
 
         function updateStreams(id) {
             $.ajax({
-                url: "/classes/update_stream.php",
+                url: "/ESAMS/classes/update_stream.php",
                 type: "POST",
                 data: {
                     id: id

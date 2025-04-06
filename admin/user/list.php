@@ -51,7 +51,7 @@
 							<td class="text-center"><?php echo $i++; ?></td>
 							<td><?php echo date("Y-m-d H:i",strtotime($row['date_updated'])) ?></td>
 							<td class="text-center">
-                                <img src="<?= validate_image($row['avatar']) ?>" alt="" class="img-thumbnail rounded-circle user-avatar">
+                                <img src="<?php echo $row['avatar'] ?>" alt="" class="img-thumbnail rounded-circle user-avatar">
                             </td>
 							<td><?php echo $row['name'] ?></td>
 							<td><?php echo $row['username'] ?></td>
@@ -98,7 +98,7 @@
 	function delete_user($id){
 		start_loader();
 		$.ajax({
-			url:_base_url_+"classes/Users.php?f=delete",
+			url: "/ESAMS/classes/Users.php?f=delete",
 			method:"POST",
 			data:{id: $id},
 			error:err=>{

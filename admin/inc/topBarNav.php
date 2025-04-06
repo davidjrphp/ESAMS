@@ -54,9 +54,9 @@
                     <span class="sr-only">Toggle Dropdown</span>
                   </button>
                   <div class="dropdown-menu" role="menu">
-                    <a class="dropdown-item" href="/admin/?page=user"><span class="fa fa-user"></span> My Account</a>
+                    <a class="dropdown-item" href="/ESAMS/admin/?page=user"><span class="fa fa-user"></span> My Account</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="../classes/Login.php?f=logout"><span class="fas fa-sign-out-alt" id="logout"></span> Logout</a>
+                    <a class="dropdown-item" href="/ESAMS/classes/Login.php?f=logout"><span class="fas fa-sign-out-alt" id="logout"></span> Logout</a>
                   </div>
               </div>
           </li>

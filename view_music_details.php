@@ -39,7 +39,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 </style>
 <div class="container-fluid">
     <div class="form-group d-flex justify-content-center">
-        <img src="<?php echo validate_image((isset($banner_path) ? $banner_path : "")) ?>" alt="" id="BannerViewer" class="img-fluid img-thumbnail bg-dark border-dark">
+        <img src="<?php echo isset($banner_path) ? $banner_path : "" ?>" alt="" id="BannerViewer" class="img-fluid img-thumbnail bg-dark border-dark">
     </div>
     <div class="form-group row">
         <label for="title" class="control-label col-md-3">Title:</label>

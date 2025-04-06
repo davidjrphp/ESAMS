@@ -5,6 +5,9 @@ error_reporting(E_ALL);
 
 require_once '../config.php'; 
 
+// Base URL for assets (adjust based on your server root)
+define('BASE_URL', '/ESAMS/'); // Ensure this matches your document root, e.g., http://localhost:8088/ESAMS/
+
 $page_title = "Music List";
 $page_description = "";
 $category_id = null;
@@ -16,9 +19,10 @@ if (isset($_GET['cid']) && !empty($_GET['cid'])) {
     if ($result->num_rows > 0) {
         $category = $result->fetch_assoc();
         $category_id = $category['id'];
-        $page_title = $category['name'];
-        $page_description = $category['description'];
+        $page_title = htmlspecialchars($category['name']);
+        $page_description = htmlspecialchars($category['description']);
     }
+    $cat_qry->close();
 }
 ?>
 
@@ -224,10 +228,17 @@ if (isset($_GET['cid']) && !empty($_GET['cid'])) {
             }
 
             while ($row = $music_list->fetch_assoc()) :
+                // Fix paths with validation
+                $banner_path = !empty($row['banner_path']) && file_exists(base_app . $row['banner_path']) 
+                    ? BASE_URL . $row['banner_path'] 
+                    : BASE_URL . 'uploads/default_banner.jpg';
+                $audio_path = !empty($row['audio_path']) && file_exists(base_app . $row['audio_path']) 
+                    ? BASE_URL . $row['audio_path'] 
+                    : '';
             ?>
                 <div class="music-item">
                     <div class="music-banner">
-                        <img src="<?= file_exists($row['banner_path']) && !empty($row['banner_path']) ? $row['banner_path'] : '/ESAMS/uploads/default_banner.jpg' ?>" alt="<?= htmlspecialchars($row['title']) ?>">
+                        <img src="<?= htmlspecialchars($banner_path) ?>" alt="<?= htmlspecialchars($row['title']) ?>">
                     </div>
                     <div class="music-details">
                         <div class="music-title"><?= htmlspecialchars($row['title']) ?></div>
@@ -235,18 +246,21 @@ if (isset($_GET['cid']) && !empty($_GET['cid'])) {
                         <div class="music-category"><?= htmlspecialchars($row['category_name'] ?? 'Unknown Category') ?> • <span class="music-streams"><?= number_format($row['streams']) ?> streams</span></div>
                     </div>
                     <div class="music-actions">
-                        <a href="<?= $row['audio_path'] ?>" download="<?= htmlspecialchars($row['title'] . '.' . pathinfo($row['audio_path'], PATHINFO_EXTENSION)) ?>" class="music-btns"><i class="fa fa-download"></i></a>
-                        <a href="javascript:void(0)" data-id="<?= $row['id'] ?>" class="music-btns play_music"><i class="fa fa-play"></i></a>
+                        <?php if ($audio_path): ?>
+                            <a href="<?= htmlspecialchars($audio_path) ?>" download="<?= htmlspecialchars($row['title'] . '.' . pathinfo($row['audio_path'], PATHINFO_EXTENSION)) ?>" class="music-btns"><i class="fa fa-download"></i></a>
+                            <a href="javascript:void(0)" data-id="<?= $row['id'] ?>" data-audio="<?= htmlspecialchars($audio_path) ?>" data-banner="<?= htmlspecialchars($banner_path) ?>" class="music-btns play_music"><i class="fa fa-play"></i></a>
+                        <?php endif; ?>
                         <a href="javascript:void(0)" data-id="<?= $row['id'] ?>" class="music-btns view_music_details"><i class="fa fa-info"></i></a>
                     </div>
                 </div>
             <?php endwhile; ?>
+            <?php $stmt->close(); ?>
         </div>
     </div>
 
     <div id="player-field">
         <div id="player-img-holder">
-            <img src="/ESAMS/uploads/default_banner.jpg" alt="">
+            <img src="<?= htmlspecialchars(BASE_URL . 'uploads/default_banner.jpg') ?>" alt="">
         </div>
         <button class="play-btn" id="play"><i class="fa fa-play"></i></button>
         <div id="player-slider">
@@ -282,42 +296,80 @@ if (isset($_GET['cid']) && !empty($_GET['cid'])) {
             $('.play_music').click(function(e) {
                 e.preventDefault();
                 var id = $(this).attr('data-id');
+                var audioPath = $(this).attr('data-audio');
+                var bannerPath = $(this).attr('data-banner');
                 if (typeof start_loader === 'function') start_loader();
-                $.ajax({
-                    url: "/ESAMS/classes/Master.php?f=get_music_details&id=" + id,
-                    dataType: "json",
-                    error: err => {
-                        alert("Error fetching audio file.");
-                        if (typeof end_loader === 'function') end_loader();
-                        console.error(err);
-                    },
-                    success: function(resp) {
-                        if (typeof resp === 'object' && resp.discPath) {
-                            disc.src = resp.discPath;
-                            document.querySelector('#player-img-holder img').src = resp.coverPath || '/ESAMS/uploads/default_banner.jpg';
-                            document.getElementById('title').textContent = resp.title;
-                            document.getElementById('artist').textContent = resp.artist;
-                            $('#player-field').css('display', 'flex');
-                            disc.play();
-                        } else {
-                            alert("Invalid audio file data.");
-                            console.error(resp);
+
+                // Use local paths instead of AJAX if available
+                if (audioPath) {
+                    disc.src = audioPath;
+                    document.querySelector('#player-img-holder img').src = bannerPath;
+                    document.getElementById('title').textContent = $(this).closest('.music-item').find('.music-title').text();
+                    document.getElementById('artist').textContent = $(this).closest('.music-item').find('.music-artist').text();
+                    $('#player-field').css('display', 'flex');
+                    disc.play().catch(err => console.error('Play error:', err));
+                    if (typeof end_loader === 'function') end_loader();
+
+                    // Update streams via AJAX
+                    $.ajax({
+                        url: "/ESAMS/classes/Master.php?f=update_streams",
+                        method: "POST",
+                        data: { id: id },
+                        error: err => console.error('Stream update failed:', err),
+                        success: resp => console.log('Streams updated:', resp)
+                    });
+                } else {
+                    $.ajax({
+                        url: "/ESAMS/classes/Master.php?f=get_music_details&id=" + id,
+                        dataType: "json",
+                        error: err => {
+                            alert("Error fetching audio file.");
+                            if (typeof end_loader === 'function') end_loader();
+                            console.error(err);
+                        },
+                        success: function(resp) {
+                            if (typeof resp === 'object' && resp.discPath) {
+                                disc.src = resp.discPath;
+                                document.querySelector('#player-img-holder img').src = resp.coverPath || '<?= htmlspecialchars(BASE_URL . 'uploads/default_banner.jpg') ?>';
+                                document.getElementById('title').textContent = resp.title;
+                                document.getElementById('artist').textContent = resp.artist;
+                                $('#player-field').css('display', 'flex');
+                                disc.play().catch(err => console.error('Play error:', err));
+                            } else {
+                                alert("Invalid audio file data.");
+                                console.error(resp);
+                            }
+                            if (typeof end_loader === 'function') end_loader();
                         }
-                        if (typeof end_loader === 'function') end_loader();
-                    }
-                });
+                    });
+                }
             });
 
             $('#play').click(function(e) {
                 e.preventDefault();
                 if (disc.paused) {
-                    disc.play();
+                    disc.play().catch(err => console.error('Play error:', err));
                 } else {
                     disc.pause();
                 }
                 play.querySelector('i').classList.toggle('fa-play', disc.paused);
                 play.querySelector('i').classList.toggle('fa-pause', !disc.paused);
             });
+
+            disc.addEventListener('timeupdate', function() {
+                var progress = (disc.currentTime / disc.duration) * 100;
+                document.getElementById('progress').style.width = progress + '%';
+                var current = formatTime(disc.currentTime);
+                var total = formatTime(disc.duration);
+                document.getElementById('timer').textContent = current;
+                document.getElementById('duration').textContent = total;
+            });
+
+            function formatTime(seconds) {
+                var minutes = Math.floor(seconds / 60);
+                var secs = Math.floor(seconds % 60);
+                return minutes + ':' + (secs < 10 ? '0' + secs : secs);
+            }
         });
     </script>
 </div>

@@ -71,9 +71,9 @@
 										<span class="sr-only">Toggle Dropdown</span>
 									</button>
 									<div class="dropdown-menu" role="menu">
-										<a class="dropdown-item view-data" href="<?= base_url . "admin/?page=musics/view_music&id={$row['id']}" ?>"><span class="fa fa-eye text-light"></span> View</a>
+										<a class="dropdown-item view-data" href="<?= "/ESAMS/admin/?page=musics/view_music&id={$row['id']}" ?>"><span class="fa fa-eye text-light"></span> View</a>
 										<div class="dropdown-divider"></div>
-										<a class="dropdown-item edit-data" href="<?= base_url . "admin/?page=musics/manage_music&id={$row['id']}" ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
+										<a class="dropdown-item edit-data" href="<?= "/ESAMS/admin/?page=musics/manage_music&id={$row['id']}" ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
 										<div class="dropdown-divider"></div>
 										<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
 									</div>
@@ -95,10 +95,10 @@
 			uni_modal("<i class='far fa-plus-square'></i> Add New Music ", "musics/manage_music.php")
 		})
 		$('.edit-data').click(function() {
-			uni_modal("<i class='fa fa-edit'></i> Add New Music ", "musics/manage_music.php?id=" + $(this).attr('data-id'))
+			uni_modal("<i class='fa fa-edit'></i> Add New Music ", "/ESAMS/admin/musics/manage_music.php?id=" + $(this).attr('data-id'))
 		})
 		$('.view-data').click(function() {
-			uni_modal("<i class='fa fa-th-list'></i> Music Details ", "musics/view_music.php?id=" + $(this).attr('data-id'))
+			uni_modal("<i class='fa fa-th-list'></i> Music Details ", "/ESAMS/admin/musics/view_music.php?id=" + $(this).attr('data-id'))
 		})
 		$('.table').dataTable({
 			columnDefs: [{
@@ -113,7 +113,7 @@
 	function delete_music($id) {
 		start_loader();
 		$.ajax({
-			url: _base_url_ + "classes/Master.php?f=delete_music",
+			url: "/ESAMS/classes/Master.php?f=delete_music",
 			method: "POST",
 			data: {
 				id: $id
